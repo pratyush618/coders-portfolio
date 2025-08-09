@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Inter, Space_Mono } from 'next/font/google'
 import './globals.css'
 import { siteConfig } from '@/lib/siteConfig'
 
@@ -9,9 +9,11 @@ const inter = Inter({
   display: 'swap',
 })
 
-const jetbrainsMono = JetBrains_Mono({
+const spaceMono = Space_Mono({
   subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
+  variable: '--font-space-mono',
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
   display: 'swap',
 })
 
@@ -92,7 +94,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-bg text-text antialiased`}
+        className={`${inter.variable} ${spaceMono.variable} font-mono bg-bg text-text antialiased`}
       >
         <div className="relative flex min-h-screen flex-col">
           <main className="flex-1">{children}</main>

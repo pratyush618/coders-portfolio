@@ -12,10 +12,18 @@ const nextConfig = {
     typedRoutes: true,
   },
   images: {
-    domains: ['images.unsplash.com', 'via.placeholder.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https', 
+        hostname: 'via.placeholder.com',
+      },
+    ],
   },
   reactStrictMode: true,
-  swcMinify: true,
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
 }
 
