@@ -1,29 +1,45 @@
 import { MetadataRoute } from 'next'
-import { getAllPosts } from '@/lib/mdx'
+import { blogDb } from '@/lib/database'
 import { siteConfig } from '@/lib/siteConfig'
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const allPosts = getAllPosts()
-  const posts = allPosts.map(post => ({
-    url: `${siteConfig.url}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }))
-
-  return [
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = siteConfig.url || 'http://localhost:3000'
+  
+  // Static pages
+  const staticPages = [
     {
-      url: siteConfig.url,
+      url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly' as const,
       priority: 1,
     },
     {
-      url: `${siteConfig.url}/blog`,
+      url: `${baseUrl}/blog`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
+      changeFrequency: 'daily' as const,
+      priority: 0.8,
     },
-    ...posts,
   ]
+
+  // Get all published blog posts
+  const posts = await blogDb.getPublishedPosts()
+  
+  const blogPages = posts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.updated_at),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
+  // Get all tags
+  const tags = await blogDb.getAllTags()
+  
+  const tagPages = tags.map((tag) => ({
+    url: `${baseUrl}/blog?tag=${tag.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.4,
+  }))
+
+  return [...staticPages, ...blogPages, ...tagPages]
 }

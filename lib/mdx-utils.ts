@@ -32,6 +32,15 @@ export async function processMdx(content: string, options: MdxProcessingOptions 
   }
 }
 
+export function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single
+    .replace(/^-|-$/g, '') // Remove leading/trailing hyphens
+}
+
 export function estimateReadingTime(content: string): number {
   // Remove MDX/HTML tags and count words
   const plainText = content
@@ -46,15 +55,6 @@ export function estimateReadingTime(content: string): number {
   const wordCount = plainText.split(/\s+/).filter(word => word.length > 0).length
   const wordsPerMinute = 200 // Average reading speed
   return Math.ceil(wordCount / wordsPerMinute)
-}
-
-export function generateSlug(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-') // Replace multiple hyphens with single
-    .replace(/^-|-$/g, '') // Remove leading/trailing hyphens
 }
 
 export function extractMetaFromMdx(content: string) {

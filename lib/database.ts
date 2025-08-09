@@ -144,7 +144,7 @@ export const blogDb = {
   getPostBySlug: async (slug: string): Promise<BlogPost | null> => {
     const post = await dbGet(`
       SELECT * FROM blog_posts 
-      WHERE slug = ? AND published = 1
+      WHERE slug = ?
     `, [slug]) as BlogPost | undefined
     
     if (!post) return null
@@ -186,30 +186,44 @@ export const blogDb = {
 
   // Create new post
   createPost: async (post: CreateBlogPost): Promise<number> => {
-    const result = await dbRun(`
-      INSERT INTO blog_posts (
-        slug, title, description, content, featured, published, 
-        published_at, reading_time, cover_image, author
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-      post.slug,
-      post.title,
-      post.description || null,
-      post.content,
-      post.featured ? 1 : 0,
-      post.published ? 1 : 0,
-      post.published_at || null,
-      post.reading_time || null,
-      post.cover_image || null,
-      post.author || 'Claude'
-    ]) as any
-
-    // Add tags if provided
-    if (post.tags && post.tags.length > 0) {
-      await blogDb.addTagsToPost(result.lastID, post.tags)
-    }
-
-    return result.lastID
+    return new Promise((resolve, reject) => {
+      db.run(`
+        INSERT INTO blog_posts (
+          slug, title, description, content, featured, published, 
+          published_at, reading_time, cover_image, author
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        post.slug,
+        post.title,
+        post.description || null,
+        post.content,
+        post.featured ? 1 : 0,
+        post.published ? 1 : 0,
+        post.published_at || null,
+        post.reading_time || null,
+        post.cover_image || null,
+        post.author || 'Claude'
+      ], async function(err) {
+        if (err) {
+          reject(err)
+          return
+        }
+        
+        const postId = this.lastID
+        
+        // Add tags if provided
+        if (post.tags && post.tags.length > 0) {
+          try {
+            await blogDb.addTagsToPost(postId, post.tags)
+          } catch (error) {
+            reject(error)
+            return
+          }
+        }
+        
+        resolve(postId)
+      })
+    })
   },
 
   // Update post
