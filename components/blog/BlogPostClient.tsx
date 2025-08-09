@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Calendar, Clock, Tag, Share, Copy, Check } from 'lucide-react'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/database'
-import { MDXRenderer } from './MDXRenderer'
+import { SimpleMDXRenderer } from './SimpleMDXRenderer'
 
 interface BlogPostClientProps {
   post: BlogPost
@@ -153,9 +153,9 @@ export function BlogPostClient({ post, relatedPosts }: BlogPostClientProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="prose prose-lg max-w-none prose-invert prose-headings:text-text prose-p:text-text-secondary prose-a:text-accent prose-a:no-underline hover:prose-a:text-accent-hover prose-strong:text-text prose-code:text-accent prose-code:bg-bg-secondary prose-code:px-2 prose-code:py-1 prose-code:rounded prose-pre:bg-bg-secondary prose-pre:border prose-pre:border-border"
+        className="blog-content max-w-none"
       >
-        <MDXRenderer content={post.content} />
+        <SimpleMDXRenderer content={post.content} />
       </motion.div>
 
       {/* Article Footer */}

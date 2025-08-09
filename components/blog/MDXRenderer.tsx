@@ -1,110 +1,250 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { Copy, Check } from 'lucide-react'
+import Prism from 'prismjs'
+
+// Import Prism languages
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-python'
+import 'prismjs/components/prism-css'
+import 'prismjs/components/prism-sql'
+import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-json'
+import 'prismjs/components/prism-markup'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-tsx'
+import 'prismjs/components/prism-diff'
 
 interface MDXRendererProps {
   content: string
 }
 
 export function MDXRenderer({ content }: MDXRendererProps) {
-  const [processedContent, setProcessedContent] = useState<string>('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    const processContent = async () => {
-      try {
-        setIsLoading(true)
-        setError(null)
-        
-        // For now, we'll render the raw MDX content as HTML
-        // In a full implementation, you'd compile the MDX
-        const htmlContent = content
-          .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-          .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-          .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-          .replace(/^#### (.*$)/gm, '<h4>$1</h4>')
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-          .replace(/`(.*?)`/g, '<code>$1</code>')
-          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-accent hover:text-accent-hover">$1</a>')
-          .replace(/\n\n/g, '</p><p>')
-          .replace(/^(?!<[h1-6]|<ul|<ol|<li|<blockquote|<pre|<code)/gm, '<p>')
-          .replace(/(?<!<\/[h1-6]>|<\/li>|<\/blockquote>|<\/pre>|<\/code>)$/gm, '</p>')
-          // Handle code blocks
-          .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-            return `<pre class="bg-bg-secondary border border-border rounded-lg p-4 overflow-x-auto my-6"><code class="language-${lang || 'text'}">${code.trim()}</code></pre>`
-          })
-          // Handle line breaks
-          .replace(/\n/g, '<br>')
-        
-        setProcessedContent(htmlContent)
-      } catch (err) {
-        setError('Failed to process content')
-        console.error('MDX processing error:', err)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    processContent()
+    // Apply Prism highlighting after component renders
+    setTimeout(() => Prism.highlightAll(), 100)
   }, [content])
 
-  useEffect(() => {
-    // Add copy functionality to code blocks after content is rendered
-    const addCopyButtons = () => {
-      const codeBlocks = document.querySelectorAll('pre code')
-      codeBlocks.forEach((block) => {
-        const pre = block.parentElement
-        if (pre && !pre.querySelector('.copy-button')) {
-          const button = document.createElement('button')
-          button.className = 'copy-button absolute top-2 right-2 p-2 bg-bg-secondary border border-border rounded text-text-secondary hover:text-accent transition-colors'
-          button.innerHTML = '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>'
-          
-          button.onclick = async () => {
-            try {
-              await navigator.clipboard.writeText(block.textContent || '')
-              button.innerHTML = '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>'
-              setTimeout(() => {
-                button.innerHTML = '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>'
-              }, 2000)
-            } catch (err) {
-              console.error('Failed to copy code:', err)
-            }
-          }
-          
-          pre.style.position = 'relative'
-          pre.appendChild(button)
-        }
-      })
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
     }
-
-    if (!isLoading && processedContent) {
-      setTimeout(addCopyButtons, 100)
-    }
-  }, [isLoading, processedContent])
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
-      </div>
-    )
   }
 
-  if (error) {
-    return (
-      <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-400">
-        <p>Error loading content: {error}</p>
+  // Normalize language names for Prism
+  const normalizeLanguage = (lang: string) => {
+          const languageMap: { [key: string]: string } = {
+            'js': 'javascript',
+            'ts': 'typescript',
+            'py': 'python',
+            'sh': 'bash',
+            'shell': 'bash',
+            'html': 'markup',
+            'xml': 'markup',
+            'md': 'markdown',
+            'yml': 'yaml',
+            'yaml': 'yaml'
+          }
+    return languageMap[lang?.toLowerCase()] || lang?.toLowerCase() || 'text'
+  }
+
+  const components = {
+    // Headers with proper styling
+    h1: ({ children }: any) => (
+      <h1 className="text-4xl md:text-5xl font-bold text-text mb-8 mt-12 leading-tight">{children}</h1>
+    ),
+    h2: ({ children }: any) => (
+      <h2 className="text-3xl md:text-4xl font-bold text-text mb-6 mt-10 leading-tight">{children}</h2>
+    ),
+    h3: ({ children }: any) => (
+      <h3 className="text-2xl md:text-3xl font-bold text-text mb-4 mt-8 leading-tight">{children}</h3>
+    ),
+    h4: ({ children }: any) => (
+      <h4 className="text-xl md:text-2xl font-bold text-text mb-4 mt-6 leading-tight">{children}</h4>
+    ),
+    h5: ({ children }: any) => (
+      <h5 className="text-lg md:text-xl font-bold text-text mb-3 mt-6 leading-tight">{children}</h5>
+    ),
+    h6: ({ children }: any) => (
+      <h6 className="text-base md:text-lg font-bold text-text mb-3 mt-4 leading-tight">{children}</h6>
+    ),
+
+    // Paragraphs with proper spacing
+    p: ({ children }: any) => (
+      <p className="text-text-secondary leading-relaxed mb-6 text-base md:text-lg">{children}</p>
+    ),
+
+    // Enhanced links with external link handling
+    a: ({ href, children }: any) => (
+      <a 
+        href={href} 
+        className="text-accent hover:text-accent/80 underline underline-offset-2 hover:underline-offset-4 transition-all" 
+        target={href?.startsWith('http') ? '_blank' : undefined}
+        rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+      >
+        {children}
+      </a>
+    ),
+
+    // Enhanced code blocks with syntax highlighting
+    pre: ({ children }: any) => {
+      const codeElement = children?.props
+      const code = codeElement?.children
+      const language = codeElement?.className?.replace('language-', '') || 'text'
+      const normalizedLang = normalizeLanguage(language)
+
+      return (
+        <div className="relative group my-8">
+          <div className="bg-bg-secondary border border-border rounded-lg overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 bg-bg border-b border-border">
+              <span className="text-xs text-text-secondary font-mono uppercase tracking-wide">
+                {normalizedLang}
+              </span>
+              <button
+                onClick={() => copyToClipboard(code)}
+                className="flex items-center space-x-2 px-3 py-1 text-xs text-text-secondary hover:text-text bg-bg-secondary hover:bg-bg border border-border rounded transition-all opacity-0 group-hover:opacity-100"
+              >
+                {copied ? (
+                  <>
+                    <Check className="h-3 w-3" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3 w-3" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <pre className={`language-${normalizedLang} p-4 overflow-x-auto`}>
+              <code className={`language-${normalizedLang} text-sm leading-relaxed`}>
+                {code}
+              </code>
+            </pre>
+          </div>
+        </div>
+      )
+    },
+
+    // Inline code
+    code: ({ children, className }: any) => {
+      // If it's not in a pre block (inline code)
+      if (!className) {
+        return (
+          <code className="bg-bg-secondary text-accent px-2 py-1 rounded text-sm font-mono border border-border">
+            {children}
+          </code>
+        )
+      }
+      // If it's in a pre block, return as-is for syntax highlighting
+      return <code className={className}>{children}</code>
+    },
+
+    // Enhanced lists
+    ul: ({ children }: any) => (
+      <ul className="list-disc list-outside my-6 ml-6 space-y-2">{children}</ul>
+    ),
+    ol: ({ children }: any) => (
+      <ol className="list-decimal list-outside my-6 ml-6 space-y-2">{children}</ol>
+    ),
+    li: ({ children }: any) => (
+      <li className="text-text-secondary leading-relaxed">{children}</li>
+    ),
+
+    // Enhanced blockquotes
+    blockquote: ({ children }: any) => (
+      <blockquote className="border-l-4 border-accent pl-6 py-4 my-8 bg-bg-secondary rounded-r-lg italic text-text-secondary">
+        {children}
+      </blockquote>
+    ),
+
+    // Horizontal rules
+    hr: () => (
+      <hr className="border-0 h-px bg-gradient-to-r from-transparent via-border to-transparent my-12" />
+    ),
+
+    // Enhanced tables
+    table: ({ children }: any) => (
+      <div className="overflow-x-auto my-8 rounded-lg border border-border">
+        <table className="min-w-full border-collapse">
+          {children}
+        </table>
       </div>
+    ),
+    thead: ({ children }: any) => (
+      <thead className="bg-bg-secondary">{children}</thead>
+    ),
+    tbody: ({ children }: any) => (
+      <tbody className="bg-bg divide-y divide-border">{children}</tbody>
+    ),
+    th: ({ children }: any) => (
+      <th className="px-6 py-3 text-left text-xs font-semibold text-text uppercase tracking-wider border-r border-border last:border-r-0">
+        {children}
+      </th>
+    ),
+    td: ({ children }: any) => (
+      <td className="px-6 py-4 text-text-secondary border-r border-border last:border-r-0">
+        {children}
+      </td>
+    ),
+
+    // Text formatting
+    strong: ({ children }: any) => (
+      <strong className="font-bold text-text">{children}</strong>
+    ),
+    em: ({ children }: any) => (
+      <em className="italic text-text">{children}</em>
+    ),
+
+    // Enhanced images
+    img: ({ src, alt }: any) => (
+      <div className="my-8">
+        <img 
+          src={src} 
+          alt={alt} 
+          className="max-w-full h-auto rounded-lg border border-border shadow-lg mx-auto"
+        />
+        {alt && (
+          <p className="text-center text-sm text-text-secondary mt-2 italic">{alt}</p>
+        )}
+      </div>
+    ),
+
+    // Task lists (from remark-gfm)
+    input: ({ checked, disabled }: any) => (
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        className="mr-3 accent-accent"
+      />
+    ),
+
+    // Strikethrough (from remark-gfm)
+    del: ({ children }: any) => (
+      <del className="text-text-secondary line-through opacity-75">{children}</del>
     )
   }
 
   return (
-    <div 
-      className="mdx-content"
-      dangerouslySetInnerHTML={{ __html: processedContent }}
-    />
+    <div className="mdx-content prose prose-lg max-w-none">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={components}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
   )
 }
