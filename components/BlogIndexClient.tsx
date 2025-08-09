@@ -3,14 +3,21 @@
 import { motion } from 'framer-motion'
 import { Calendar, Clock, ArrowRight, Tag } from 'lucide-react'
 import Link from 'next/link'
-import { formatDate } from '@/lib/utils'
-import type { Post } from '@/lib/mdx'
+import { BlogPost } from '@/lib/database'
 
 interface BlogIndexClientProps {
-  posts: Post[]
+  posts: BlogPost[]
 }
 
 export function BlogIndexClient({ posts }: BlogIndexClientProps) {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
+
   return (
     <section id="blog" className="section-padding">
       <div className="container">
@@ -47,7 +54,7 @@ export function BlogIndexClient({ posts }: BlogIndexClientProps) {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post, index) => (
                 <motion.article
-                  key={post.slug}
+                  key={post.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: index * 0.1 }}
@@ -60,14 +67,16 @@ export function BlogIndexClient({ posts }: BlogIndexClientProps) {
                       <div className="flex items-center space-x-4 text-text-secondary text-sm mb-4">
                         <div className="flex items-center space-x-1">
                           <Calendar className="h-4 w-4" />
-                          <time dateTime={post.date}>
-                            {formatDate(post.date)}
+                          <time dateTime={post.published_at || post.created_at}>
+                            {formatDate(post.published_at || post.created_at)}
                           </time>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <Clock className="h-4 w-4" />
-                          <span>5 min read</span>
-                        </div>
+                        {post.reading_time && (
+                          <div className="flex items-center space-x-1">
+                            <Clock className="h-4 w-4" />
+                            <span>{post.reading_time} min read</span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Post Title */}
@@ -76,9 +85,11 @@ export function BlogIndexClient({ posts }: BlogIndexClientProps) {
                       </h3>
 
                       {/* Post Description */}
-                      <p className="body-base mb-4 line-clamp-3">
-                        {post.description}
-                      </p>
+                      {post.description && (
+                        <p className="body-base mb-4 line-clamp-3">
+                          {post.description}
+                        </p>
+                      )}
 
                       {/* Tags */}
                       {post.tags && post.tags.length > 0 && (
@@ -87,10 +98,10 @@ export function BlogIndexClient({ posts }: BlogIndexClientProps) {
                           <div className="flex flex-wrap gap-2">
                             {post.tags.slice(0, 3).map((tag) => (
                               <span
-                                key={tag}
+                                key={tag.id}
                                 className="px-2 py-1 bg-bg-secondary border border-border rounded text-xs text-text-secondary"
                               >
-                                {tag}
+                                {tag.name}
                               </span>
                             ))}
                             {post.tags.length > 3 && (

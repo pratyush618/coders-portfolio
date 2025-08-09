@@ -1,10 +1,9 @@
-import { getAllPosts } from '@/lib/mdx'
+import { blogDb } from '@/lib/database'
 import { BlogIndexClient } from './BlogIndexClient'
 
 export async function BlogIndex() {
-  // Get the latest 3 posts (this runs on the server)
-  const allPosts = getAllPosts()
-  const latestPosts = allPosts.slice(0, 3)
+  // Get the latest 3 featured posts (this runs on the server)
+  const latestPosts = await blogDb.getFeaturedPosts(3)
 
   return <BlogIndexClient posts={latestPosts} />
 }

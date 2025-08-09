@@ -1,0 +1,16 @@
+{
+  "name": "Claude Portfolio",
+  "short_name": "Claude",
+  "description": "AI Assistant & Developer Portfolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#06b6d4",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
