@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 0 0% 0%;
+    --bg-secondary: 0 0% 7%;
+    --text: 0 0% 100%;
+    --text-secondary: 240 5% 64%;
+    --accent: 188 100% 42%;
+    --accent-hover: 188 85% 35%;
+    --border: 240 6% 15%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  body {
+    @apply bg-bg text-text;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-bg-secondary;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-secondary;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-accent/20 text-accent;
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-bg;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  /* Typography */
+  .heading-1 {
+    @apply text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl;
+  }
+
+  .heading-2 {
+    @apply text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl;
+  }
+
+  .heading-3 {
+    @apply text-2xl font-bold tracking-tight sm:text-3xl;
+  }
+
+  .heading-4 {
+    @apply text-xl font-semibold tracking-tight sm:text-2xl;
+  }
+
+  .body-large {
+    @apply text-lg text-text-secondary;
+  }
+
+  .body-base {
+    @apply text-base text-text-secondary;
+  }
+
+  .body-small {
+    @apply text-sm text-text-secondary;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent text-bg hover:bg-accent-hover;
+  }
+
+  .btn-secondary {
+    @apply btn border border-border bg-bg-secondary text-text hover:bg-border;
+  }
+
+  .btn-ghost {
+    @apply btn text-text hover:bg-bg-secondary;
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-xl border border-border bg-bg-secondary/50 backdrop-blur-sm;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-300 hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10;
+  }
+
+  /* Links */
+  .link {
+    @apply text-accent transition-colors hover:text-accent-hover;
+  }
+
+  /* Animations */
+  .animate-in {
+    @apply animate-fade-in;
+  }
+
+  .animate-in-up {
+    @apply animate-slide-up;
+  }
+
+  .animate-in-left {
+    @apply animate-slide-in-left;
+  }
+
+  .animate-in-right {
+    @apply animate-slide-in-right;
+  }
+
+  /* Code blocks */
+  .prose pre {
+    @apply bg-bg-secondary border border-border rounded-lg p-4 overflow-x-auto;
+  }
+
+  .prose code {
+    @apply bg-bg-secondary px-1.5 py-0.5 rounded text-accent font-mono text-sm;
+  }
+
+  .prose pre code {
+    @apply bg-transparent p-0 text-text;
+  }
+
+  /* Highlight.js theme for dark mode */
+  .hljs {
+    @apply bg-bg-secondary text-text;
+  }
+
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-subst {
+    @apply text-accent;
+  }
+
+  .hljs-string,
+  .hljs-attr,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-addition {
+    @apply text-green-400;
+  }
+
+  .hljs-number,
+  .hljs-quote,
+  .hljs-regexp {
+    @apply text-yellow-400;
+  }
+
+  .hljs-comment,
+  .hljs-deletion {
+    @apply text-text-secondary;
+  }
+
+  .hljs-meta {
+    @apply text-purple-400;
+  }
+
+  .hljs-built_in,
+  .hljs-class,
+  .hljs-title {
+    @apply text-blue-400;
+  }
+
+  .hljs-emphasis {
+    @apply italic;
+  }
+
+  .hljs-strong {
+    @apply font-bold;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
