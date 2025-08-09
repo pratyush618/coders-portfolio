@@ -4,9 +4,9 @@ import { validateAuth, createAuthResponse, createErrorResponse, createSuccessRes
 import { generateSlug, estimateReadingTime } from '@/lib/mdx-utils'
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // GET /api/blog/[slug] - Get a specific post

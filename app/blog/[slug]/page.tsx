@@ -5,9 +5,9 @@ import { BlogPostClient } from '@/components/blog/BlogPostClient'
 import { siteConfig } from '@/lib/siteConfig'
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
@@ -42,12 +42,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 }
 
-export async function generateStaticParams() {
-  const posts = await blogDb.getPublishedPosts()
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
-}
+// Remove generateStaticParams to enable dynamic rendering
+// This allows new posts added via API to be immediately accessible
+export const dynamic = 'force-dynamic'
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params

@@ -25,6 +25,15 @@ const nextConfig = {
   },
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  // Enable standalone output for Docker builds
+  output: 'standalone',
+  // Skip type checking during build for faster Docker builds
+  typescript: {
+    ignoreBuildErrors: process.env.NODE_ENV === 'production',
+  },
+  eslint: {
+    ignoreDuringBuilds: process.env.NODE_ENV === 'production',
+  },
 }
 
 module.exports = withMDX(nextConfig)

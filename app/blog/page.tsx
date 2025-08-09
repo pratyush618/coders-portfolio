@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   },
 }
 
+// Enable dynamic rendering to show new posts immediately
+export const dynamic = 'force-dynamic'
+
 export default async function BlogPage() {
   const posts = await blogDb.getPublishedPosts()
   const featuredPosts = await blogDb.getFeaturedPosts(3)

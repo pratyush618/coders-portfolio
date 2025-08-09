@@ -6,9 +6,9 @@ const dbPath = path.join(process.cwd(), 'blog.db')
 const db = new sqlite3.Database(dbPath)
 
 // Promisify database methods for easier async/await usage
-const dbRun = promisify(db.run.bind(db))
-const dbGet = promisify(db.get.bind(db))
-const dbAll = promisify(db.all.bind(db))
+const dbRun = promisify(db.run.bind(db)) as (sql: string, ...params: any[]) => Promise<any>
+const dbGet = promisify(db.get.bind(db)) as (sql: string, ...params: any[]) => Promise<any>
+const dbAll = promisify(db.all.bind(db)) as (sql: string, ...params: any[]) => Promise<any[]>
 
 // Enable foreign keys
 db.run('PRAGMA foreign_keys = ON')
@@ -145,7 +145,7 @@ export const blogDb = {
     const post = await dbGet(`
       SELECT * FROM blog_posts 
       WHERE slug = ?
-    `, [slug]) as BlogPost | undefined
+    `, slug) as BlogPost | undefined
     
     if (!post) return null
     
@@ -271,7 +271,7 @@ export const blogDb = {
       `, [tagName, slug])
       
       // Get tag ID
-      const tag = await dbGet('SELECT id FROM blog_tags WHERE name = ?', [tagName]) as { id: number } | undefined
+      const tag = await dbGet('SELECT id FROM blog_tags WHERE name = ?', tagName) as { id: number } | undefined
       
       if (tag) {
         // Link post to tag

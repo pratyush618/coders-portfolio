@@ -8,6 +8,9 @@ import { Skills } from '@/components/Skills'
 import { BlogIndex } from '@/components/BlogIndex'
 import { Footer } from '@/components/Footer'
 
+// Enable dynamic rendering to show new blog posts immediately
+export const dynamic = 'force-dynamic'
+
 export default function HomePage() {
   return (
     <>
