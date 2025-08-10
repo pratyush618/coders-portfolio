@@ -125,6 +125,7 @@ export function Projects() {
             transition={{ duration: 0.8, delay: 0.6 }}
             viewport={{ once: true }}
             className="mb-12"
+            suppressHydrationWarning
           >
             {/* Search Bar */}
             <div className="max-w-md mx-auto mb-6" suppressHydrationWarning>

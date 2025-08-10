@@ -13,30 +13,24 @@ export function ScrollProgress() {
   })
 
   useEffect(() => {
-    const updateScrollProgress = () => {
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrollPercent = scrollTop / docHeight
+    const unsubscribe = scrollYProgress.on('change', (latest) => {
+      // Show progress bar after scrolling 5%
+      setIsVisible(latest > 0.05)
+    })
 
-      // Show progress bar after scrolling 10%
-      setIsVisible(scrollPercent > 0.1)
-    }
+    return unsubscribe
+  }, [scrollYProgress])
 
-    window.addEventListener('scroll', updateScrollProgress)
-    updateScrollProgress() // Initial call
-
-    return () => window.removeEventListener('scroll', updateScrollProgress)
-  }, [])
+  if (!isVisible) return null
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 z-50 h-1 bg-accent origin-left"
-      style={{ 
-        scaleX,
-        opacity: isVisible ? 1 : 0,
-        transition: 'opacity 0.3s ease-in-out'
-      }}
+      className="fixed top-0 left-0 right-0 z-[60] h-1 bg-accent origin-left pointer-events-none"
+      style={{ scaleX }}
       initial={{ scaleX: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ opacity: { duration: 0.3 } }}
     >
       {/* Glow effect */}
       <motion.div
@@ -46,7 +40,7 @@ export function ScrollProgress() {
       
       {/* Shimmer effect */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+        className="absolute top-0 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent w-24"
         animate={{
           x: ['-100%', '100%'],
         }}
@@ -54,10 +48,7 @@ export function ScrollProgress() {
           duration: 2,
           repeat: Infinity,
           ease: 'linear',
-        }}
-        style={{ 
-          width: '100px',
-          height: '100%',
+          repeatDelay: 1,
         }}
       />
     </motion.div>
