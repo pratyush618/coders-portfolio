@@ -9,21 +9,27 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        bg: '#000000',
-        'bg-secondary': '#111111',
-        text: '#ffffff',
-        'text-secondary': '#a1a1aa',
-        accent: '#06b6d4',
-        'accent-hover': '#0891b2',
-        border: '#27272a',
-        // Cyber theme colors
+        bg: '#020202',
+        'bg-secondary': '#0a0a0a',
+        text: '#e6ffff',
+        'text-secondary': '#99d6ea',
+        accent: '#00ffff',
+        'accent-hover': '#33ffff',
+        border: '#1a4a4a',
+        // Enhanced Cyberpunk colors
         'neon-cyan': '#00ffff',
         'neon-pink': '#ff0080',
         'neon-green': '#00ff41',
         'neon-purple': '#8a2be2',
-        'cyber-blue': '#0066ff',
+        'cyber-blue': '#0099ff',
         'matrix-green': '#00ff41',
         'hologram': '#40e0d0',
+        'electric-blue': '#0099ff',
+        'cyber-orange': '#ff6600',
+        'plasma-purple': '#9966ff',
+        'scan-blue': '#00ccff',
+        'grid-cyan': '#006666',
+        'terminal-green': '#00cc41',
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
@@ -45,7 +51,7 @@ module.exports = {
         'wiggle': 'wiggle 1s ease-in-out infinite',
         'heartbeat': 'heartbeat 1.5s ease-in-out infinite',
         'progress': 'progress 2s ease-out forwards',
-        // Cyber animations
+        // Enhanced Cyber animations
         'neon-pulse': 'neonPulse 2s ease-in-out infinite alternate',
         'cyber-scan': 'cyberScan 3s linear infinite',
         'data-flow': 'dataFlow 4s linear infinite',
@@ -53,6 +59,12 @@ module.exports = {
         'matrix-scroll': 'matrixScroll 20s linear infinite',
         'glitch': 'glitch 0.3s ease-in-out infinite',
         'neon-border': 'neonBorder 4s linear infinite',
+        'cyber-border-flow': 'cyber-border-flow 6s ease-in-out infinite',
+        'hologram-scan': 'hologram-scan 8s linear infinite',
+        'cyber-pulse': 'cyber-pulse 3s ease-in-out infinite',
+        'data-corruption': 'data-corruption 2s ease-in-out infinite',
+        'neural-network': 'neural-network 4s ease-in-out infinite',
+        'quantum-flicker': 'quantum-flicker 1.5s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -139,11 +151,51 @@ module.exports = {
           '80%': { transform: 'translate(2px, -2px)' }
         },
         neonBorder: {
-          '0%': { borderColor: '#06b6d4' },
-          '25%': { borderColor: '#00ffff' },
+          '0%': { borderColor: '#00ffff' },
+          '25%': { borderColor: '#0099ff' },
           '50%': { borderColor: '#00ff41' },
           '75%': { borderColor: '#ff0080' },
-          '100%': { borderColor: '#06b6d4' }
+          '100%': { borderColor: '#00ffff' }
+        },
+        'cyber-border-flow': {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' }
+        },
+        'hologram-scan': {
+          '0%': { transform: 'translateX(-100%) translateY(-100%)' },
+          '100%': { transform: 'translateX(100vw) translateY(100vh)' }
+        },
+        'cyber-pulse': {
+          '0%, 100%': { 
+            boxShadow: '0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff'
+          },
+          '50%': { 
+            boxShadow: '0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff'
+          }
+        },
+        'data-corruption': {
+          '0%, 100%': { filter: 'hue-rotate(0deg) saturate(1) contrast(1)' },
+          '25%': { filter: 'hue-rotate(90deg) saturate(1.5) contrast(1.2)' },
+          '50%': { filter: 'hue-rotate(180deg) saturate(2) contrast(0.8)' },
+          '75%': { filter: 'hue-rotate(270deg) saturate(1.2) contrast(1.1)' }
+        },
+        'neural-network': {
+          '0%': { opacity: '0.3', transform: 'scale(1)' },
+          '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+          '100%': { opacity: '0.3', transform: 'scale(1)' }
+        },
+        'quantum-flicker': {
+          '0%, 100%': { opacity: '1' },
+          '10%': { opacity: '0.8' },
+          '20%': { opacity: '1' },
+          '30%': { opacity: '0.9' },
+          '40%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
+          '60%': { opacity: '1' },
+          '70%': { opacity: '0.95' },
+          '80%': { opacity: '1' },
+          '90%': { opacity: '0.85' }
         },
       },
       typography: {

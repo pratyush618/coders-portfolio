@@ -30,7 +30,7 @@ export function Header() {
       className={cn(
         'fixed top-0 z-50 w-full transition-all duration-300',
         isScrolled
-          ? 'bg-bg/95 backdrop-blur-md border-b border-border'
+          ? 'terminal-window backdrop-blur-md border-b cyber-border'
           : 'bg-transparent'
       )}
     >
@@ -42,7 +42,9 @@ export function Header() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center space-x-2"
           >
-            <span className="text-xl font-bold text-accent">Claude</span>
+            <span className="text-xl font-bold cyber-text neural-glow">
+              {'<CLAUDE/>'}
+            </span>
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -60,9 +62,9 @@ export function Header() {
                 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleNavClick(item.href)}
-                className="relative text-sm font-medium text-text-secondary hover:text-accent transition-colors group"
+                className="relative text-sm font-medium text-text-secondary hover:text-accent transition-colors group cyber-text"
               >
-                {item.name}
+                {'> ' + item.name.toUpperCase()}
                 
                 {/* Underline animation */}
                 <motion.div
@@ -123,7 +125,7 @@ export function Header() {
               animate={{ opacity: 1, height: 'auto', y: 0 }}
               exit={{ opacity: 0, height: 0, y: -10 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="md:hidden border-t border-border bg-bg/95 backdrop-blur-md overflow-hidden"
+              className="md:hidden border-t cyber-border terminal-window backdrop-blur-md overflow-hidden"
             >
               <motion.div 
                 className="py-4 space-y-2"
@@ -136,7 +138,7 @@ export function Header() {
                 initial="closed"
                 animate="open"
               >
-                {siteConfig.navigation.map((item, index) => (
+                {siteConfig.navigation.map((item) => (
                   <motion.button
                     key={item.name}
                     variants={{
@@ -157,9 +159,9 @@ export function Header() {
                       transition: { duration: 0.2 }
                     }}
                     whileTap={{ scale: 0.98 }}
-                    className="relative block w-full text-left px-4 py-3 text-sm font-medium text-text-secondary hover:text-accent rounded-lg transition-colors overflow-hidden group"
+                    className="relative block w-full text-left px-4 py-3 text-sm font-medium text-text-secondary hover:text-accent rounded-lg transition-colors overflow-hidden group cyber-text"
                   >
-                    <span className="relative z-10">{item.name}</span>
+                    <span className="relative z-10">{'> ' + item.name.toUpperCase()}</span>
                     
                     {/* Slide in background */}
                     <motion.div

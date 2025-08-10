@@ -38,7 +38,7 @@ export function Projects() {
   
   // Optimized filtering and sorting with debounced search
   const filteredProjects = useMemo(() => {
-    let filtered = siteConfig.projects.filter(project => {
+    const filtered = siteConfig.projects.filter(project => {
       // Filter by category
       const categoryMatch = 
         filter === 'all' || 

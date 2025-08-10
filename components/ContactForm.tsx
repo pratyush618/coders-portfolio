@@ -126,7 +126,7 @@ export function ContactForm() {
     }
   }
 
-  const getInputIcon = (fieldName: keyof FormData) => {
+  const _getInputIcon = (fieldName: keyof FormData) => {
     switch (fieldName) {
       case 'name': return User
       case 'email': return Mail

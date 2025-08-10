@@ -4,11 +4,10 @@ import { motion } from 'framer-motion'
 import { ArrowDown, Github, Linkedin, Mail, Twitter } from 'lucide-react'
 import { siteConfig } from '@/lib/siteConfig'
 import { scrollToElement } from '@/lib/utils'
-import { ParticleBackground } from './ParticleBackground'
+import { CyberBackground } from './CyberBackground'
 import { MatrixRain } from './MatrixRain'
-import { HexGrid } from './HexGrid'
 import { GlitchText } from './GlitchText'
-import { DataStream } from './DataStream'
+import { CyberTerminal } from './CyberTerminal'
 
 export function Hero() {
   const handleScrollToAbout = () => {
@@ -25,18 +24,14 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden cyber-grid scan-lines"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden interference"
     >
-      {/* Background layers */}
-      <div className="absolute inset-0 bg-gradient-to-br from-bg via-bg to-bg-secondary" />
+      {/* Enhanced cyberpunk background */}
+      <div className="absolute inset-0 cyber-gradient" />
       
-      {/* Hi-tech background elements */}
-      <HexGrid />
+      {/* Optimized background elements */}
+      <CyberBackground intensity="medium" enableParticles enableGrid enableScanLines />
       <MatrixRain />
-      <ParticleBackground />
-      
-      {/* Data streams */}
-      <DataStream direction="horizontal" speed="slow" density="low" className="opacity-20" />
       
       {/* Animated background elements - reduced count */}
       <div className="absolute inset-0 overflow-hidden">
@@ -78,10 +73,10 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-lg text-accent font-medium matrix-text"
+              className="text-lg cyber-text font-medium"
             >
               <GlitchText intensity="low" trigger="continuous">
-                {'> SYSTEM_ONLINE'}
+                {'> NEURAL_LINK_ESTABLISHED'}
               </GlitchText>
             </motion.p>
 
@@ -102,7 +97,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-text-secondary holographic"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold quantum-text"
             >
               <GlitchText intensity="low" trigger="hover">
                 {siteConfig.author.role}
@@ -116,7 +111,7 @@ export function Hero() {
               className="max-w-2xl mx-auto body-large"
             >
               Specializing in modern web technologies, TypeScript, and creating
-              exceptional user experiences. Let's build something amazing together.
+              exceptional user experiences. Let&apos;s build something amazing together.
             </motion.p>
           </motion.div>
 
@@ -146,7 +141,7 @@ export function Hero() {
                     transition: { duration: 0.3 }
                   }}
                   whileTap={{ scale: 0.9 }}
-                  className="group relative p-3 rounded-full bg-bg-secondary/50 cyber-border text-text-secondary hover:text-accent transition-all duration-300 neon-glow magnetic holographic"
+                  className="group relative p-3 rounded-full terminal-window cyber-border text-text-secondary hover:text-accent transition-all duration-300 neural-glow"
                   aria-label={`Follow on ${platform}`}
                 >
                   <motion.div
@@ -189,11 +184,11 @@ export function Hero() {
               }}
               whileTap={{ scale: 0.95 }}
               onClick={handleScrollToAbout}
-              className="btn-holographic group relative overflow-hidden neon-glow"
+              className="terminal-window group relative overflow-hidden cyber-border neural-glow px-6 py-3"
             >
-              <span className="relative z-10">
+              <span className="relative z-10 cyber-text">
                 <GlitchText intensity="low" trigger="hover">
-                  {'> INITIALIZE_PROFILE.EXE'}
+                  {'> INITIALIZE_NEURAL_INTERFACE'}
                 </GlitchText>
               </span>
               <motion.div
@@ -217,12 +212,12 @@ export function Hero() {
               href={siteConfig.social.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-holographic group relative overflow-hidden"
+              className="terminal-window group relative overflow-hidden cyber-border px-6 py-3"
             >
-              <span className="relative z-10 flex items-center space-x-2">
+              <span className="relative z-10 flex items-center space-x-2 cyber-text">
                 <Github className="h-4 w-4" />
                 <GlitchText intensity="low" trigger="hover">
-                  {'> ACCESS_REPOSITORY'}
+                  {'> ACCESS_MAINFRAME'}
                 </GlitchText>
               </span>
               <motion.div
@@ -234,11 +229,30 @@ export function Hero() {
             </motion.a>
           </motion.div>
 
+          {/* Cyberpunk Terminal Display */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.8 }}
+            className="mt-16 max-w-md mx-auto"
+          >
+            <CyberTerminal 
+              commands={[
+                'SCANNING NEURAL PATHWAYS...',
+                'QUANTUM ENCRYPTION: ACTIVE',
+                'AI CONSCIOUSNESS: ONLINE',
+                'REALITY.EXE INITIALIZED'
+              ]}
+              speed="medium"
+              autoStart={true}
+            />
+          </motion.div>
+
           {/* Scroll indicator */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.6 }}
+            transition={{ duration: 0.8, delay: 2.2 }}
             className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
           >
             <motion.button

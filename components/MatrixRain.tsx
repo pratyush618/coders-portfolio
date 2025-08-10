@@ -15,7 +15,7 @@ const MatrixRainComponent = function MatrixRain() {
   const columnsRef = useRef<MatrixChar[][]>([])
   const animationRef = useRef<number>()
   const lastFrameTimeRef = useRef<number>(0)
-  const targetFPS = 30
+  const targetFPS = 15 // Reduced FPS for better performance
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -24,8 +24,8 @@ const MatrixRainComponent = function MatrixRain() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Matrix characters (mix of katakana, numbers, and symbols)
-    const characters = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;:,.<>?'
+    // Optimized character set - fewer characters for better performance
+    const characters = 'アイウエオカキクケコサシスセソタチツテト0123456789ABCDEF01!@#$%'
     const fontSize = 12
     const columns = Math.floor(window.innerWidth / fontSize / 1.5)
 
@@ -131,7 +131,7 @@ const MatrixRainComponent = function MatrixRain() {
 
     resizeCanvas()
     initColumns()
-    animate()
+    animate(0)
 
     const handleResize = () => {
       resizeCanvas()
@@ -151,10 +151,10 @@ const MatrixRainComponent = function MatrixRain() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none opacity-20 z-0"
+      className="fixed inset-0 pointer-events-none opacity-15 z-0 gpu-accelerated"
       style={{ 
         mixBlendMode: 'multiply',
-        filter: 'contrast(1.2) brightness(1.1)'
+        filter: 'contrast(1.1) brightness(1.05)'
       }}
     />
   )

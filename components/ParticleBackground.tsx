@@ -21,7 +21,7 @@ const ParticleBackgroundComponent = function ParticleBackground() {
   const particlesRef = useRef<Particle[]>([])
   const animationRef = useRef<number>()
   const lastFrameTimeRef = useRef<number>(0)
-  const targetFPS = 30
+  const targetFPS = 20 // Reduced FPS for better performance
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -72,13 +72,14 @@ const ParticleBackgroundComponent = function ParticleBackground() {
 
     const initParticles = () => {
       particlesRef.current = []
-      const particleCount = Math.min(25, Math.floor((canvas.width * canvas.height) / 25000))
+      // Reduced particle count for better performance
+      const particleCount = Math.min(15, Math.floor((canvas.width * canvas.height) / 40000))
       for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push(createParticle())
       }
     }
 
-    const updateParticle = (particle: Particle, time: number) => {
+    const updateParticle = (particle: Particle, _time: number) => {
       particle.x += particle.vx
       particle.y += particle.vy
 
@@ -186,8 +187,8 @@ const ParticleBackgroundComponent = function ParticleBackground() {
 
     const drawConnections = () => {
       const particles = particlesRef.current
-      const maxDistance = 120
-      const maxConnections = 3
+      const maxDistance = 100 // Reduced distance for performance
+      const maxConnections = 2 // Reduced connections per particle
       let connectionCount = 0
 
       for (let i = 0; i < particles.length && connectionCount < maxConnections * particles.length; i++) {
@@ -279,7 +280,7 @@ const ParticleBackgroundComponent = function ParticleBackground() {
 
     resizeCanvas()
     initParticles()
-    animate()
+    animate(0)
 
     const handleResize = () => {
       resizeCanvas()
@@ -299,7 +300,7 @@ const ParticleBackgroundComponent = function ParticleBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none opacity-60"
+      className="absolute inset-0 pointer-events-none opacity-50 gpu-accelerated"
       style={{ mixBlendMode: 'screen' }}
     />
   )

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Calendar, Clock, Tag, Share, Copy, Check } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, Tag, Share, Check } from 'lucide-react'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/database'
 import { SimpleMDXRenderer } from './SimpleMDXRenderer'

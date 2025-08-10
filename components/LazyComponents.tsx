@@ -1,7 +1,7 @@
 'use client'
 
 import { lazy, Suspense } from 'react'
-import { LoadingSpinner, CardSkeleton } from './LoadingSpinner'
+import { CardSkeleton } from './LoadingSpinner'
 
 // Lazy load heavy components
 export const LazyContactForm = lazy(() => 
@@ -96,7 +96,7 @@ export function BlogIndexWithSuspense() {
         </div>
       </div>
     }>
-      <LazyBlogIndex />
+      <LazyBlogIndexClient posts={[]} />
     </Suspense>
   )
 }

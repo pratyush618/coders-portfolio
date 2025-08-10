@@ -3,6 +3,7 @@ import { Inter, Space_Mono } from 'next/font/google'
 import './globals.css'
 import { siteConfig } from '@/lib/siteConfig'
 import { ScrollProgress } from '@/components/ScrollProgress'
+import { PerformanceOptimizer } from '@/components/PerformanceOptimizer'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -95,12 +96,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${spaceMono.variable} font-mono bg-bg text-text antialiased`}
+        className={`${inter.variable} ${spaceMono.variable} font-mono bg-bg text-text antialiased gpu-accelerated`}
       >
-        <ScrollProgress />
-        <div className="relative flex min-h-screen flex-col">
-          <main className="flex-1">{children}</main>
-        </div>
+        <PerformanceOptimizer>
+          <ScrollProgress />
+          <div className="relative flex min-h-screen flex-col interference">
+            <main className="flex-1">{children}</main>
+          </div>
+        </PerformanceOptimizer>
       </body>
     </html>
   )

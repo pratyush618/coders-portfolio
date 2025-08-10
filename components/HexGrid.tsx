@@ -228,7 +228,7 @@ const HexGridComponent = function HexGrid() {
 
     resizeCanvas()
     initHexGrid()
-    animate()
+    animate(0)
 
     canvas.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('resize', handleResize)
