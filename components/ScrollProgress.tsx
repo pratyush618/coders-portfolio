@@ -5,6 +5,8 @@ import { motion, useScroll, useSpring } from 'framer-motion'
 
 export function ScrollProgress() {
   const [isVisible, setIsVisible] = useState(false)
+  const [currentSection, setCurrentSection] = useState('INITIALIZING')
+  const [progressPercent, setProgressPercent] = useState(0)
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -12,10 +14,35 @@ export function ScrollProgress() {
     restDelta: 0.001
   })
 
+  // Neural nodes for animation
+  const neuralNodes = [
+    { id: 1, position: 15, delay: 0 },
+    { id: 2, position: 35, delay: 0.2 },
+    { id: 3, position: 55, delay: 0.4 },
+    { id: 4, position: 75, delay: 0.6 },
+    { id: 5, position: 90, delay: 0.8 }
+  ]
+
   useEffect(() => {
     const unsubscribe = scrollYProgress.on('change', (latest) => {
       // Show progress bar after scrolling 5%
       setIsVisible(latest > 0.05)
+      
+      // Update progress percentage
+      setProgressPercent(Math.round(latest * 100))
+      
+      // Update current section based on scroll progress
+      if (latest < 0.2) {
+        setCurrentSection('HERO')
+      } else if (latest < 0.4) {
+        setCurrentSection('ABOUT')
+      } else if (latest < 0.6) {
+        setCurrentSection('PROJECTS')
+      } else if (latest < 0.8) {
+        setCurrentSection('SKILLS')
+      } else {
+        setCurrentSection('CONTACT')
+      }
     })
 
     return unsubscribe
@@ -58,7 +85,7 @@ export function ScrollProgress() {
               key={node.id}
               className="absolute top-1/2 w-3 h-3 -translate-y-1/2 energy-core rounded-full"
               style={{ left: `${node.position}%` }}
-              initial={{ scale: 0, opacity: 0 }}
+              initial={{ scale: 0.8, opacity: 0 }}
               animate={{ 
                 scale: [0.8, 1.2, 0.8]
               }}
@@ -95,7 +122,7 @@ export function ScrollProgress() {
               filter: 'blur(1px)'
             }}
             animate={{
-              x: ['-64px', 'calc(100vw + 64px)']
+              x: ['-100%', '100%']
             }}
             transition={{
               duration: 3,
