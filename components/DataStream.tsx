@@ -141,14 +141,8 @@ const DataStreamComponent = function DataStream({
           }}
           animate={
             direction === 'horizontal'
-              ? {
-                  x: ['0vw', '110vw'],
-                  opacity: [0, element.opacity, element.opacity, 0]
-                }
-              : {
-                  y: ['0vh', '110vh'],
-                  opacity: [0, element.opacity, element.opacity, 0]
-                }
+              ? { x: ['0vw', '110vw'] }
+              : { y: ['0vh', '110vh'] }
           }
           transition={{
             duration: element.duration / speedValues[speed],
@@ -170,18 +164,17 @@ const DataStreamComponent = function DataStream({
             style={{
               left: direction === 'horizontal' ? '-50px' : `${element.position}%`,
               top: direction === 'vertical' ? '-50px' : `${element.position}%`,
-              color: '#06b6d4'
+              color: '#06b6d4',
+              opacity: 0.2
             }}
             animate={
               direction === 'horizontal'
                 ? {
                     x: ['0vw', '110vw'],
-                    opacity: [0, 0.2, 0.2, 0],
                     rotate: [0, 360]
                   }
                 : {
                     y: ['0vh', '110vh'],
-                    opacity: [0, 0.2, 0.2, 0],
                     rotate: [0, 360]
                   }
             }
@@ -223,13 +216,7 @@ const DataStreamComponent = function DataStream({
             top: `${20 + i * 20}%`
           }}
           animate={{
-            scale: [1, 2, 1],
-            opacity: [0.3, 0.8, 0.3],
-            boxShadow: [
-              '0 0 5px #06b6d4',
-              '0 0 20px #06b6d4, 0 0 30px #06b6d4',
-              '0 0 5px #06b6d4'
-            ]
+            scale: [1, 2, 1]
           }}
           transition={{
             duration: 2 + i * 0.5,

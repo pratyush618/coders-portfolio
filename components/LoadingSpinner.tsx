@@ -17,7 +17,8 @@ export function LoadingSpinner({ size = 'md', color = 'accent' }: LoadingSpinner
   return (
     <div className="flex items-center justify-center">
       <motion.div
-        className={`${sizeClasses[size]} border-2 border-transparent border-t-${color} rounded-full`}
+        className={`${sizeClasses[size]} border-2 border-transparent rounded-full`}
+        style={{ borderTopColor: `var(--color-${color})` }}
         animate={{ rotate: 360 }}
         transition={{
           duration: 1,
@@ -35,11 +36,14 @@ export function PulsingDot({ delay = 0 }: { delay?: number }) {
       className="w-2 h-2 bg-accent rounded-full"
       animate={{
         scale: [1, 1.5, 1],
-        opacity: [0.5, 1, 0.5]
+      }}
+      style={{
+        opacity: 0.7
       }}
       transition={{
         duration: 1.5,
         repeat: Infinity,
+        repeatType: "loop",
         delay
       }}
     />
