@@ -96,7 +96,7 @@ export function BlogIndexWithSuspense() {
         </div>
       </div>
     }>
-      <LazyBlogIndex />
+      <LazyBlogIndexClient posts={[]} />
     </Suspense>
   )
 }
