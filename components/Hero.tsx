@@ -5,6 +5,10 @@ import { ArrowDown, Github, Linkedin, Mail, Twitter } from 'lucide-react'
 import { siteConfig } from '@/lib/siteConfig'
 import { scrollToElement } from '@/lib/utils'
 import { ParticleBackground } from './ParticleBackground'
+import { MatrixRain } from './MatrixRain'
+import { HexGrid } from './HexGrid'
+import { GlitchText } from './GlitchText'
+import { DataStream } from './DataStream'
 
 export function Hero() {
   const handleScrollToAbout = () => {
@@ -21,13 +25,19 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden cyber-grid scan-lines"
     >
-      {/* Background gradient */}
+      {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-to-br from-bg via-bg to-bg-secondary" />
       
-      {/* Particle background */}
+      {/* Hi-tech background elements */}
+      <HexGrid />
+      <MatrixRain />
       <ParticleBackground />
+      
+      {/* Data streams */}
+      <DataStream direction="horizontal" speed="slow" density="low" className="opacity-30" />
+      <DataStream direction="vertical" speed="medium" density="low" className="opacity-20" />
       
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -83,9 +93,11 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-lg text-accent font-medium"
+              className="text-lg text-accent font-medium matrix-text"
             >
-              Hello, I'm
+              <GlitchText intensity="low" trigger="continuous">
+                {'> SYSTEM_ONLINE'}
+              </GlitchText>
             </motion.p>
 
             <h1 className="heading-1 text-text">
@@ -93,9 +105,11 @@ export function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="block"
+                className="block neon-glow"
               >
-                {siteConfig.author.name}
+                <GlitchText intensity="medium" trigger="hover">
+                  {siteConfig.author.name}
+                </GlitchText>
               </motion.span>
             </h1>
 
@@ -103,9 +117,11 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-text-secondary"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-text-secondary holographic"
             >
-              {siteConfig.author.role}
+              <GlitchText intensity="low" trigger="hover">
+                {siteConfig.author.role}
+              </GlitchText>
             </motion.p>
 
             <motion.p
@@ -145,7 +161,7 @@ export function Hero() {
                     transition: { duration: 0.3 }
                   }}
                   whileTap={{ scale: 0.9 }}
-                  className="group relative p-3 rounded-full bg-bg-secondary/50 border border-border text-text-secondary hover:text-accent hover:border-accent/50 transition-all duration-300 glow-on-hover magnetic"
+                  className="group relative p-3 rounded-full bg-bg-secondary/50 cyber-border text-text-secondary hover:text-accent transition-all duration-300 neon-glow magnetic holographic"
                   aria-label={`Follow on ${platform}`}
                 >
                   <motion.div
@@ -188,9 +204,13 @@ export function Hero() {
               }}
               whileTap={{ scale: 0.95 }}
               onClick={handleScrollToAbout}
-              className="btn-primary btn-enhanced group relative overflow-hidden"
+              className="btn-holographic group relative overflow-hidden neon-glow"
             >
-              <span className="relative z-10">Learn More About Me</span>
+              <span className="relative z-10">
+                <GlitchText intensity="low" trigger="hover">
+                  {'> INITIALIZE_PROFILE.EXE'}
+                </GlitchText>
+              </span>
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-accent-hover to-accent"
                 initial={{ x: '-100%' }}
@@ -212,11 +232,13 @@ export function Hero() {
               href={siteConfig.social.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary btn-enhanced group relative overflow-hidden"
+              className="btn-holographic group relative overflow-hidden"
             >
               <span className="relative z-10 flex items-center space-x-2">
                 <Github className="h-4 w-4" />
-                <span>View My Work</span>
+                <GlitchText intensity="low" trigger="hover">
+                  {'> ACCESS_REPOSITORY'}
+                </GlitchText>
               </span>
               <motion.div
                 className="absolute inset-0 bg-accent/5"

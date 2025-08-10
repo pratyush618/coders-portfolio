@@ -12,6 +12,8 @@ import {
   Zap
 } from 'lucide-react'
 import { siteConfig } from '@/lib/siteConfig'
+import { HolographicCard } from './HolographicCard'
+import { GlitchText } from './GlitchText'
 
 const skillIcons = {
   'Frontend Development': Code,
@@ -41,9 +43,11 @@ export function Skills() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
-              className="heading-2 text-text mb-4"
+              className="heading-2 text-text mb-4 neon-glow"
             >
-              Skills & Technologies
+              <GlitchText intensity="medium" trigger="hover">
+                {'> NEURAL_CAPABILITIES.DAT'}
+              </GlitchText>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -70,14 +74,11 @@ export function Skills() {
                   viewport={{ once: true }}
                   className="group"
                 >
-                  <motion.div 
-                    className="card-hover h-full p-8"
-                    whileHover={{
-                      boxShadow: "0 20px 40px -12px rgba(6, 182, 212, 0.15)",
-                      borderColor: "rgba(6, 182, 212, 0.3)",
-                    }}
-                    transition={{ duration: 0.3 }}
+                  <HolographicCard 
+                    className="h-full"
+                    intensity={0.7}
                   >
+                    <div className="p-8 h-full">
                     {/* Category Header */}
                     <div className="flex items-center space-x-4 mb-6">
                       <motion.div 
@@ -92,11 +93,13 @@ export function Skills() {
                         <IconComponent className="h-6 w-6 text-accent" />
                       </motion.div>
                       <motion.h3 
-                        className="heading-4 text-text"
+                        className="heading-4 text-text neon-glow"
                         whileHover={{ x: 4 }}
                         transition={{ duration: 0.2 }}
                       >
-                        {category}
+                        <GlitchText intensity="low" trigger="hover">
+                          {category}
+                        </GlitchText>
                       </motion.h3>
                     </div>
 
@@ -120,11 +123,13 @@ export function Skills() {
                           >
                             {/* Skill Name and Level */}
                             <div className="flex items-center justify-between mb-2">
-                              <span className="body-base group-hover/skill:text-text transition-colors font-medium">
-                                {skill}
+                              <span className="body-base group-hover/skill:text-text transition-colors font-medium matrix-text">
+                                <GlitchText intensity="low" trigger="hover">
+                                  {skill}
+                                </GlitchText>
                               </span>
                               <motion.span 
-                                className="text-xs text-accent font-mono"
+                                className="text-xs text-accent font-mono neon-glow"
                                 initial={{ opacity: 0 }}
                                 whileInView={{ opacity: 1 }}
                                 transition={{ delay: (index * 0.1) + (skillIndex * 0.05) + 0.3 }}
@@ -149,10 +154,13 @@ export function Skills() {
                                 />
                               </div>
                               
-                              {/* Glow effect on hover */}
+                              {/* Neon glow effect on hover */}
                               <motion.div
-                                className="absolute inset-0 bg-accent/20 rounded-full blur-sm opacity-0 group-hover/skill:opacity-100 transition-opacity"
-                                style={{ width: `${skillLevel}%` }}
+                                className="absolute inset-0 bg-accent/30 rounded-full blur-sm opacity-0 group-hover/skill:opacity-100 transition-opacity cyber-border"
+                                style={{ 
+                                  width: `${skillLevel}%`,
+                                  boxShadow: '0 0 15px rgba(6, 182, 212, 0.4)'
+                                }}
                               />
                             </div>
                           </motion.div>
@@ -203,7 +211,8 @@ export function Skills() {
                         </motion.div>
                       </div>
                     </motion.div>
-                  </motion.div>
+                    </div>
+                  </HolographicCard>
                 </motion.div>
               )
             })}
@@ -217,8 +226,13 @@ export function Skills() {
             viewport={{ once: true }}
             className="mt-16"
           >
-            <div className="card p-8 text-center">
-              <h3 className="heading-3 text-text mb-4">Always Learning</h3>
+            <HolographicCard className="text-center" intensity={0.4}>
+              <div className="p-8">
+              <h3 className="heading-3 text-text mb-4 neon-glow">
+                <GlitchText intensity="medium" trigger="hover">
+                  {'> CONTINUOUS_EVOLUTION.SYS'}
+                </GlitchText>
+              </h3>
               <p className="body-large mb-8 max-w-3xl mx-auto">
                 Technology evolves rapidly, and I'm committed to staying current with the latest 
                 tools, frameworks, and best practices. I'm always exploring new technologies and 
@@ -226,47 +240,64 @@ export function Skills() {
               </p>
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="p-4 bg-bg-secondary rounded-lg border border-border">
-                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3">
+                <div className="p-4 bg-bg-secondary rounded-lg cyber-border holographic">
+                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3 neon-glow">
                     <Code className="h-6 w-6 text-accent" />
                   </div>
-                  <h4 className="font-semibold text-text mb-2">Clean Code</h4>
+                  <h4 className="font-semibold text-text mb-2 matrix-text">
+                    <GlitchText intensity="low" trigger="hover">
+                      Clean Code
+                    </GlitchText>
+                  </h4>
                   <p className="body-small">
                     Writing maintainable, readable, and efficient code
                   </p>
                 </div>
 
-                <div className="p-4 bg-bg-secondary rounded-lg border border-border">
-                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3">
+                <div className="p-4 bg-bg-secondary rounded-lg cyber-border holographic">
+                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3 neon-glow">
                     <Zap className="h-6 w-6 text-accent" />
                   </div>
-                  <h4 className="font-semibold text-text mb-2">Performance</h4>
+                  <h4 className="font-semibold text-text mb-2 matrix-text">
+                    <GlitchText intensity="low" trigger="hover">
+                      Performance
+                    </GlitchText>
+                  </h4>
                   <p className="body-small">
                     Optimizing applications for speed and efficiency
                   </p>
                 </div>
 
-                <div className="p-4 bg-bg-secondary rounded-lg border border-border">
-                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3">
+                <div className="p-4 bg-bg-secondary rounded-lg cyber-border holographic">
+                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3 neon-glow">
                     <Globe className="h-6 w-6 text-accent" />
                   </div>
-                  <h4 className="font-semibold text-text mb-2">Accessibility</h4>
+                  <h4 className="font-semibold text-text mb-2 matrix-text">
+                    <GlitchText intensity="low" trigger="hover">
+                      Accessibility
+                    </GlitchText>
+                  </h4>
                   <p className="body-small">
                     Building inclusive web experiences for all users
                   </p>
                 </div>
 
-                <div className="p-4 bg-bg-secondary rounded-lg border border-border">
-                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3">
+                <div className="p-4 bg-bg-secondary rounded-lg cyber-border holographic">
+                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3 neon-glow">
                     <Palette className="h-6 w-6 text-accent" />
                   </div>
-                  <h4 className="font-semibold text-text mb-2">UX Focus</h4>
+                  <h4 className="font-semibold text-text mb-2 matrix-text">
+                    <GlitchText intensity="low" trigger="hover">
+                      UX Focus
+                    </GlitchText>
+                  </h4>
                   <p className="body-small">
                     Prioritizing user experience in every design decision
                   </p>
                 </div>
               </div>
             </div>
+            </HolographicCard>
           </motion.div>
         </motion.div>
       </div>
