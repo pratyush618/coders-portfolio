@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, memo } from 'react'
 import { motion } from 'framer-motion'
 
 interface HexCell {
@@ -13,10 +13,12 @@ interface HexCell {
   pulsePhase: number
 }
 
-export function HexGrid() {
+const HexGridComponent = function HexGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const hexGridRef = useRef<HexCell[][]>([])
   const animationRef = useRef<number>()
+  const lastFrameTimeRef = useRef<number>(0)
+  const targetFPS = 24
   const mouseRef = useRef({ x: 0, y: 0 })
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -27,7 +29,7 @@ export function HexGrid() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const hexSize = 25
+    const hexSize = 30
     const hexWidth = hexSize * 2
     const hexHeight = Math.sqrt(3) * hexSize
     let rows: number
@@ -36,8 +38,8 @@ export function HexGrid() {
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
-      rows = Math.ceil(canvas.height / hexHeight * 1.5) + 2
-      cols = Math.ceil(canvas.width / (hexWidth * 0.75)) + 2
+      rows = Math.ceil(canvas.height / hexHeight * 1.2) + 1
+      cols = Math.ceil(canvas.width / (hexWidth * 0.75)) + 1
     }
 
     const initHexGrid = () => {
@@ -103,8 +105,8 @@ export function HexGrid() {
             hex.energy *= 0.95 // Gradual decay
           }
 
-          // Random activation for ambient effect
-          if (Math.random() < 0.001) {
+          // Random activation for ambient effect (reduced frequency)
+          if (Math.random() < 0.0005) {
             hex.energy = Math.max(hex.energy, Math.random() * 30)
           }
         })
@@ -200,9 +202,16 @@ export function HexGrid() {
       })
     }
 
-    const animate = () => {
-      updateHexGrid()
-      drawGrid()
+    const animate = (frameTime: number) => {
+      const deltaTime = frameTime - lastFrameTimeRef.current
+      const targetDelta = 1000 / targetFPS
+      
+      if (deltaTime >= targetDelta) {
+        updateHexGrid()
+        drawGrid()
+        lastFrameTimeRef.current = frameTime
+      }
+      
       animationRef.current = requestAnimationFrame(animate)
     }
 
@@ -247,3 +256,5 @@ export function HexGrid() {
     />
   )
 }
+
+export const HexGrid = memo(HexGridComponent)

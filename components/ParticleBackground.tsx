@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, memo } from 'react'
 
 interface Particle {
   x: number
@@ -16,10 +16,12 @@ interface Particle {
   energy: number
 }
 
-export function ParticleBackground() {
+const ParticleBackgroundComponent = function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
   const animationRef = useRef<number>()
+  const lastFrameTimeRef = useRef<number>(0)
+  const targetFPS = 30
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -70,7 +72,7 @@ export function ParticleBackground() {
 
     const initParticles = () => {
       particlesRef.current = []
-      const particleCount = Math.min(50, Math.floor((canvas.width * canvas.height) / 15000))
+      const particleCount = Math.min(25, Math.floor((canvas.width * canvas.height) / 25000))
       for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push(createParticle())
       }
@@ -184,10 +186,13 @@ export function ParticleBackground() {
 
     const drawConnections = () => {
       const particles = particlesRef.current
-      const maxDistance = 150
+      const maxDistance = 120
+      const maxConnections = 3
+      let connectionCount = 0
 
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
+      for (let i = 0; i < particles.length && connectionCount < maxConnections * particles.length; i++) {
+        let particleConnections = 0
+        for (let j = i + 1; j < particles.length && particleConnections < maxConnections; j++) {
           const p1 = particles[i]
           const p2 = particles[j]
           const dx = p1.x - p2.x
@@ -195,7 +200,9 @@ export function ParticleBackground() {
           const distance = Math.sqrt(dx * dx + dy * dy)
 
           if (distance < maxDistance) {
-            const opacity = (1 - distance / maxDistance) * 0.4
+            connectionCount++
+            particleConnections++
+            const opacity = (1 - distance / maxDistance) * 0.3
             
             // Different connection styles based on particle types
             ctx.save()
@@ -250,16 +257,22 @@ export function ParticleBackground() {
       }
     }
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      const currentTime = Date.now() * 0.001
+    const animate = (frameTime: number) => {
+      const deltaTime = frameTime - lastFrameTimeRef.current
+      const targetDelta = 1000 / targetFPS
+      
+      if (deltaTime >= targetDelta) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        const currentTime = Date.now() * 0.001
 
-      particlesRef.current.forEach(particle => {
-        updateParticle(particle, currentTime)
-        drawParticle(particle)
-      })
+        particlesRef.current.forEach(particle => {
+          updateParticle(particle, currentTime)
+          drawParticle(particle)
+        })
 
-      drawConnections()
+        drawConnections()
+        lastFrameTimeRef.current = frameTime
+      }
 
       animationRef.current = requestAnimationFrame(animate)
     }
@@ -291,3 +304,5 @@ export function ParticleBackground() {
     />
   )
 }
+
+export const ParticleBackground = memo(ParticleBackgroundComponent)

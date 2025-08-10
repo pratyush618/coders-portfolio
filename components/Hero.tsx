@@ -36,44 +36,29 @@ export function Hero() {
       <ParticleBackground />
       
       {/* Data streams */}
-      <DataStream direction="horizontal" speed="slow" density="low" className="opacity-30" />
-      <DataStream direction="vertical" speed="medium" density="low" className="opacity-20" />
+      <DataStream direction="horizontal" speed="slow" density="low" className="opacity-20" />
       
-      {/* Animated background elements */}
+      {/* Animated background elements - reduced count */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div 
-          className="absolute -top-40 -right-40 w-80 h-80 bg-accent/5 rounded-full blur-3xl float-animation"
+          className="absolute -top-40 -right-40 w-80 h-80 bg-accent/4 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.1, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.1, 1, 1.1],
-            opacity: [0.6, 0.3, 0.6],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/3 rounded-full blur-3xl"
-          animate={{
-            x: [-50, 50, -50],
-            y: [-30, 30, -30],
-            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{
             duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/2 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.15, 1],
+          }}
+          transition={{
+            duration: 16,
             repeat: Infinity,
             ease: "easeInOut"
           }}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, memo, useMemo } from 'react'
 import { motion } from 'framer-motion'
 
 interface DataStreamProps {
@@ -21,7 +21,7 @@ interface DataElement {
   position: number
 }
 
-export function DataStream({ 
+const DataStreamComponent = function DataStream({ 
   className = '', 
   direction = 'horizontal',
   speed = 'medium',
@@ -32,17 +32,17 @@ export function DataStream({
   const [binaryElements, setBinaryElements] = useState<Array<{ id: number, position: number, delay: number, duration: number }>>([])
   const [isClient, setIsClient] = useState(false)
 
-  const speedValues = {
+  const speedValues = useMemo(() => ({
     slow: 0.5,
     medium: 1,
     fast: 2
-  }
+  }), [])
 
-  const densityValues = {
-    low: 20,
-    medium: 40,
-    high: 60
-  }
+  const densityValues = useMemo(() => ({
+    low: 15,
+    medium: 25,
+    high: 35
+  }), [])
 
   useEffect(() => {
     setIsClient(true)
@@ -241,3 +241,5 @@ export function DataStream({
     </div>
   )
 }
+
+export const DataStream = memo(DataStreamComponent)

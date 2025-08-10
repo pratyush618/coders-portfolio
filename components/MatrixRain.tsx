@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, memo } from 'react'
 
 interface MatrixChar {
   x: number
@@ -10,10 +10,12 @@ interface MatrixChar {
   opacity: number
 }
 
-export function MatrixRain() {
+const MatrixRainComponent = function MatrixRain() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const columnsRef = useRef<MatrixChar[][]>([])
   const animationRef = useRef<number>()
+  const lastFrameTimeRef = useRef<number>(0)
+  const targetFPS = 30
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -25,7 +27,7 @@ export function MatrixRain() {
     // Matrix characters (mix of katakana, numbers, and symbols)
     const characters = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;:,.<>?'
     const fontSize = 12
-    const columns = Math.floor(window.innerWidth / fontSize)
+    const columns = Math.floor(window.innerWidth / fontSize / 1.5)
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -38,7 +40,7 @@ export function MatrixRain() {
         columnsRef.current[i] = []
         // Start some columns at different heights for variety
         const startHeight = Math.random() * canvas.height
-        for (let j = 0; j < Math.floor(canvas.height / fontSize); j++) {
+        for (let j = 0; j < Math.floor(canvas.height / fontSize / 1.2); j++) {
           columnsRef.current[i].push({
             x: i * fontSize,
             y: startHeight + (j * fontSize),
@@ -64,8 +66,8 @@ export function MatrixRain() {
             char.opacity = Math.random() * 0.8 + 0.1
           }
 
-          // Randomly change character
-          if (Math.random() < 0.005) {
+          // Randomly change character (reduced frequency)
+          if (Math.random() < 0.002) {
             char.char = characters[Math.floor(Math.random() * characters.length)]
           }
 
@@ -114,9 +116,16 @@ export function MatrixRain() {
       })
     }
 
-    const animate = () => {
-      updateMatrix()
-      drawMatrix()
+    const animate = (currentTime: number) => {
+      const deltaTime = currentTime - lastFrameTimeRef.current
+      const targetDelta = 1000 / targetFPS
+      
+      if (deltaTime >= targetDelta) {
+        updateMatrix()
+        drawMatrix()
+        lastFrameTimeRef.current = currentTime
+      }
+      
       animationRef.current = requestAnimationFrame(animate)
     }
 
@@ -150,3 +159,5 @@ export function MatrixRain() {
     />
   )
 }
+
+export const MatrixRain = memo(MatrixRainComponent)
