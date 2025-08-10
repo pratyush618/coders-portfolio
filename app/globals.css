@@ -140,6 +140,107 @@
     @apply animate-slide-in-right;
   }
 
+  /* Enhanced Button Animations */
+  .btn-enhanced {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .btn-enhanced::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent;
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .btn-enhanced:hover::before {
+    transform: translateX(100%);
+  }
+
+  /* Shimmer Effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+
+  /* Gradient Background Animation */
+  .gradient-animated {
+    background: linear-gradient(-45deg, #06b6d4, #0891b2, #06b6d4, #0284c7);
+    background-size: 400% 400%;
+    @apply animate-gradient;
+  }
+
+  /* Floating Elements */
+  .float-animation {
+    @apply animate-float;
+  }
+
+  /* Glow Effect */
+  .glow-on-hover {
+    transition: all 0.3s ease;
+  }
+
+  .glow-on-hover:hover {
+    @apply animate-glow;
+  }
+
+  /* Stagger Animation Delays */
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
+
+  .stagger-2 {
+    animation-delay: 0.2s;
+  }
+
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
+
+  .stagger-4 {
+    animation-delay: 0.4s;
+  }
+
+  .stagger-5 {
+    animation-delay: 0.5s;
+  }
+
+  .stagger-6 {
+    animation-delay: 0.6s;
+  }
+
+  /* Magnetic Effect */
+  .magnetic {
+    transition: transform 0.2s ease-out;
+  }
+
+  /* Loading Skeleton */
+  .skeleton {
+    @apply bg-bg-secondary/50;
+    background: linear-gradient(90deg, 
+      rgba(255, 255, 255, 0.05) 25%, 
+      rgba(255, 255, 255, 0.1) 50%, 
+      rgba(255, 255, 255, 0.05) 75%
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+    border-radius: inherit;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    @apply bg-accent/20 rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply bg-gradient-to-r from-accent to-accent-hover h-full rounded-full animate-progress;
+  }
+
   /* Code blocks */
   .prose pre {
     @apply bg-bg-secondary border border-border rounded-lg p-4 overflow-x-auto;

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowDown, Github, Linkedin, Mail, Twitter } from 'lucide-react'
 import { siteConfig } from '@/lib/siteConfig'
 import { scrollToElement } from '@/lib/utils'
+import { ParticleBackground } from './ParticleBackground'
 
 export function Hero() {
   const handleScrollToAbout = () => {
@@ -25,10 +26,48 @@ export function Hero() {
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-bg via-bg to-bg-secondary" />
       
+      {/* Particle background */}
+      <ParticleBackground />
+      
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
+        <motion.div 
+          className="absolute -top-40 -right-40 w-80 h-80 bg-accent/5 rounded-full blur-3xl float-animation"
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1.1, 1, 1.1],
+            opacity: [0.6, 0.3, 0.6],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/3 rounded-full blur-3xl"
+          animate={{
+            x: [-50, 50, -50],
+            y: [-30, 30, -30],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       </div>
 
       <div className="container relative z-10">
@@ -87,7 +126,7 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 1 }}
             className="flex justify-center space-x-6 mt-8"
           >
-            {Object.entries(siteConfig.social).map(([platform, url]) => {
+            {Object.entries(siteConfig.social).map(([platform, url], index) => {
               const Icon = socialIcons[platform as keyof typeof socialIcons]
               if (!Icon) return null
 
@@ -97,12 +136,36 @@ export function Hero() {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-3 rounded-full bg-bg-secondary/50 border border-border text-text-secondary hover:text-accent hover:border-accent/50 transition-all duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1 + index * 0.1 }}
+                  whileHover={{ 
+                    scale: 1.2, 
+                    rotate: 360,
+                    transition: { duration: 0.3 }
+                  }}
+                  whileTap={{ scale: 0.9 }}
+                  className="group relative p-3 rounded-full bg-bg-secondary/50 border border-border text-text-secondary hover:text-accent hover:border-accent/50 transition-all duration-300 glow-on-hover magnetic"
                   aria-label={`Follow on ${platform}`}
                 >
-                  <Icon className="h-5 w-5" />
+                  <motion.div
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-accent/0 via-accent/10 to-accent/0"
+                    initial={{ scale: 0 }}
+                    whileHover={{ scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <Icon className="h-5 w-5 relative z-10" />
+                  
+                  {/* Ripple effect on click */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full border-2 border-accent/50"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileTap={{ 
+                      scale: [0, 1.5, 2], 
+                      opacity: [0.8, 0.3, 0] 
+                    }}
+                    transition={{ duration: 0.6 }}
+                  />
                 </motion.a>
               )
             })}
@@ -116,23 +179,51 @@ export function Hero() {
             className="flex flex-col sm:flex-row gap-4 justify-center mt-12"
           >
             <motion.button
-              whileHover={{ scale: 1.05 }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.3 }}
+              whileHover={{ 
+                scale: 1.05,
+                boxShadow: "0 0 25px rgba(6, 182, 212, 0.4)"
+              }}
               whileTap={{ scale: 0.95 }}
               onClick={handleScrollToAbout}
-              className="btn-primary"
+              className="btn-primary btn-enhanced group relative overflow-hidden"
             >
-              Learn More About Me
+              <span className="relative z-10">Learn More About Me</span>
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-accent-hover to-accent"
+                initial={{ x: '-100%' }}
+                whileHover={{ x: '0%' }}
+                transition={{ duration: 0.3 }}
+              />
             </motion.button>
             
             <motion.a
-              whileHover={{ scale: 1.05 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.4 }}
+              whileHover={{ 
+                scale: 1.05,
+                borderColor: "rgb(6, 182, 212)",
+                boxShadow: "0 0 20px rgba(6, 182, 212, 0.2)"
+              }}
               whileTap={{ scale: 0.95 }}
               href={siteConfig.social.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary"
+              className="btn-secondary btn-enhanced group relative overflow-hidden"
             >
-              View My Work
+              <span className="relative z-10 flex items-center space-x-2">
+                <Github className="h-4 w-4" />
+                <span>View My Work</span>
+              </span>
+              <motion.div
+                className="absolute inset-0 bg-accent/5"
+                initial={{ scale: 0 }}
+                whileHover={{ scale: 1 }}
+                transition={{ duration: 0.3 }}
+              />
             </motion.a>
           </motion.div>
 
@@ -140,17 +231,50 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.4 }}
+            transition={{ duration: 0.8, delay: 1.6 }}
             className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
           >
             <motion.button
               onClick={handleScrollToAbout}
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="p-2 text-text-secondary hover:text-accent transition-colors"
+              animate={{ 
+                y: [0, 10, 0],
+              }}
+              transition={{ 
+                duration: 2, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              whileHover={{
+                scale: 1.2,
+                color: "rgb(6, 182, 212)",
+              }}
+              whileTap={{ scale: 0.9 }}
+              className="group relative p-3 text-text-secondary hover:text-accent transition-all duration-300"
               aria-label="Scroll to content"
             >
-              <ArrowDown className="h-6 w-6" />
+              <motion.div
+                className="absolute inset-0 rounded-full border border-text-secondary/20"
+                whileHover={{
+                  borderColor: "rgb(6, 182, 212)",
+                  scale: 1.2,
+                }}
+                transition={{ duration: 0.2 }}
+              />
+              <ArrowDown className="h-6 w-6 relative z-10" />
+              
+              {/* Pulsing ring */}
+              <motion.div
+                className="absolute inset-0 rounded-full border border-accent/30"
+                animate={{
+                  scale: [1, 1.5, 1],
+                  opacity: [0.3, 0, 0.3],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
             </motion.button>
           </motion.div>
         </div>

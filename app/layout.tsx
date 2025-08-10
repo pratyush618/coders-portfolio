@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Space_Mono } from 'next/font/google'
 import './globals.css'
 import { siteConfig } from '@/lib/siteConfig'
+import { ScrollProgress } from '@/components/ScrollProgress'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -96,6 +97,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${spaceMono.variable} font-mono bg-bg text-text antialiased`}
       >
+        <ScrollProgress />
         <div className="relative flex min-h-screen flex-col">
           <main className="flex-1">{children}</main>
         </div>
