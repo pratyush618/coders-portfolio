@@ -140,6 +140,267 @@
     @apply animate-slide-in-right;
   }
 
+  /* Enhanced Button Animations */
+  .btn-enhanced {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .btn-enhanced::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent;
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .btn-enhanced:hover::before {
+    transform: translateX(100%);
+  }
+
+  /* Shimmer Effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+
+  /* Gradient Background Animation */
+  .gradient-animated {
+    background: linear-gradient(-45deg, #06b6d4, #0891b2, #06b6d4, #0284c7);
+    background-size: 400% 400%;
+    @apply animate-gradient;
+  }
+
+  /* Floating Elements */
+  .float-animation {
+    @apply animate-float;
+  }
+
+  /* Glow Effect */
+  .glow-on-hover {
+    transition: all 0.3s ease;
+  }
+
+  .glow-on-hover:hover {
+    @apply animate-glow;
+  }
+
+  /* Stagger Animation Delays */
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
+
+  .stagger-2 {
+    animation-delay: 0.2s;
+  }
+
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
+
+  .stagger-4 {
+    animation-delay: 0.4s;
+  }
+
+  .stagger-5 {
+    animation-delay: 0.5s;
+  }
+
+  .stagger-6 {
+    animation-delay: 0.6s;
+  }
+
+  /* Magnetic Effect */
+  .magnetic {
+    transition: transform 0.2s ease-out;
+  }
+
+  /* Loading Skeleton */
+  .skeleton {
+    @apply bg-bg-secondary/50;
+    background: linear-gradient(90deg, 
+      rgba(255, 255, 255, 0.05) 25%, 
+      rgba(255, 255, 255, 0.1) 50%, 
+      rgba(255, 255, 255, 0.05) 75%
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+    border-radius: inherit;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    @apply bg-accent/20 rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply bg-gradient-to-r from-accent to-accent-hover h-full rounded-full animate-progress;
+  }
+
+  /* Cyber/Hi-Tech Effects */
+  .neon-glow {
+    @apply animate-neon-pulse;
+    color: currentColor;
+  }
+
+  .cyber-border {
+    @apply border border-accent animate-neon-border;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+  }
+
+  .cyber-border:hover {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+  }
+
+  .holographic {
+    background: linear-gradient(135deg, 
+      rgba(6, 182, 212, 0.1) 0%, 
+      rgba(0, 255, 255, 0.05) 25%, 
+      rgba(0, 255, 65, 0.1) 50%, 
+      rgba(255, 0, 128, 0.05) 75%, 
+      rgba(6, 182, 212, 0.1) 100%
+    );
+    @apply animate-hologram-flicker;
+  }
+
+  .matrix-text {
+    font-family: 'Courier New', monospace;
+    color: #00ff41;
+    text-shadow: 0 0 10px #00ff41;
+    @apply animate-hologram-flicker;
+  }
+
+  .cyber-grid {
+    background-image: 
+      linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .data-stream {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .data-stream::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+    @apply animate-cyber-scan;
+  }
+
+  .glitch-text {
+    position: relative;
+    @apply animate-glitch;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch-text::before {
+    animation: glitch 0.3s ease-in-out infinite alternate-reverse;
+    color: #ff0080;
+    z-index: -1;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-2px, -2px);
+  }
+
+  .glitch-text::after {
+    animation: glitch 0.3s ease-in-out infinite alternate-reverse;
+    color: #00ffff;
+    z-index: -2;
+    clip-path: polygon(0 45%, 100% 45%, 100% 100%, 0 100%);
+    transform: translate(2px, 2px);
+  }
+
+  /* Scan line effect */
+  .scan-lines {
+    position: relative;
+  }
+
+  .scan-lines::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(6, 182, 212, 0.03) 2px,
+      rgba(6, 182, 212, 0.03) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* Terminal cursor */
+  .terminal-cursor {
+    display: inline-block;
+    background-color: #00ff41;
+    width: 2px;
+    @apply animate-pulse;
+  }
+
+  /* Circuit board pattern */
+  .circuit-pattern {
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(6, 182, 212, 0.3) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+
+  /* Holographic buttons */
+  .btn-holographic {
+    @apply btn relative overflow-hidden;
+    background: linear-gradient(135deg, 
+      rgba(6, 182, 212, 0.1) 0%, 
+      rgba(0, 255, 255, 0.05) 50%, 
+      rgba(6, 182, 212, 0.1) 100%
+    );
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: #06b6d4;
+  }
+
+  .btn-holographic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.1), 
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  .btn-holographic:hover::before {
+    left: 100%;
+  }
+
+  .btn-holographic:hover {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+    border-color: #06b6d4;
+  }
+
   /* Code blocks */
   .prose pre {
     @apply bg-bg-secondary border border-border rounded-lg p-4 overflow-x-auto;

@@ -126,10 +126,11 @@ export function BlogIndexClient({ posts }: BlogIndexClientProps) {
                       <div className="flex items-center text-accent group-hover:text-accent-hover transition-colors">
                         <span className="text-sm font-medium">Read More</span>
                         <motion.div
-                          animate={{ x: [0, 5, 0] }}
+                          animate={{ translateX: [0, 5, 0] }}
                           transition={{ 
                             duration: 1.5, 
                             repeat: Infinity, 
+                            repeatType: "loop",
                             ease: "easeInOut" 
                           }}
                           className="ml-2"
@@ -157,8 +158,12 @@ export function BlogIndexClient({ posts }: BlogIndexClientProps) {
                   best practices, and the latest technologies. Stay tuned!
                 </p>
                 <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover="hover"
+                  whileTap="tap"
+                  variants={{
+                    hover: { scale: 1.05 },
+                    tap: { scale: 0.95 }
+                  }}
                   href="/rss.xml"
                   className="btn-secondary"
                 >
@@ -178,8 +183,12 @@ export function BlogIndexClient({ posts }: BlogIndexClientProps) {
               className="text-center mt-12"
             >
               <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover="hover"
+                whileTap="tap"
+                variants={{
+                  hover: { scale: 1.05 },
+                  tap: { scale: 0.95 }
+                }}
                 href="/blog"
                 className="btn-secondary"
               >
@@ -211,8 +220,12 @@ export function BlogIndexClient({ posts }: BlogIndexClientProps) {
                   required
                 />
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover="hover"
+                  whileTap="tap"
+                  variants={{
+                    hover: { scale: 1.05 },
+                    tap: { scale: 0.95 }
+                  }}
                   type="submit"
                   className="btn-primary"
                 >

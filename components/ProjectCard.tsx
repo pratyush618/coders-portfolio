@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { ExternalLink, Github, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
@@ -23,135 +24,250 @@ interface ProjectCardProps {
   onViewDetails: (project: Project) => void
 }
 
-export function ProjectCard({ project, index, onViewDetails }: ProjectCardProps) {
+function ProjectCardComponent({ project, index, onViewDetails }: ProjectCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: index * 0.1 }}
+      initial={{ opacity: 0, y: 30, scale: 0.9 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ 
+        duration: 0.6, 
+        delay: index * 0.15,
+        ease: [0.25, 0.25, 0, 1]
+      }}
       viewport={{ once: true }}
-      className="group"
+      whileHover={{ 
+        y: -12,
+        transition: { duration: 0.3, ease: "easeOut" }
+      }}
+      className={`group stagger-${Math.min(index + 1, 6)}`}
     >
-      <div className="card-hover h-full overflow-hidden">
+      <motion.div 
+        className="card-hover h-full overflow-hidden relative"
+        whileHover={{
+          boxShadow: "0 25px 50px -12px rgba(6, 182, 212, 0.25)",
+          borderColor: "rgba(6, 182, 212, 0.5)",
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* Animated background gradient */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-accent/10 pointer-events-none"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileHover={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+        />
         {/* Project Image */}
         <div className="relative h-48 bg-bg-secondary overflow-hidden">
-          <Image
-            src={project.image}
-            alt={project.title}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          <motion.div
+            whileHover={{ scale: 1.08 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="relative w-full h-full"
+          >
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </motion.div>
           
-          {/* Featured badge */}
+          {/* Featured badge with glow animation */}
           {project.featured && (
             <div className="absolute top-4 right-4">
-              <span className="px-2 py-1 bg-accent text-bg text-xs font-semibold rounded-full">
+              <motion.span 
+                className="px-2 py-1 bg-accent text-bg text-xs font-semibold rounded-full"
+                animate={{ 
+                  boxShadow: [
+                    "0 0 0px rgba(6, 182, 212, 0.5)",
+                    "0 0 15px rgba(6, 182, 212, 0.8)",
+                    "0 0 0px rgba(6, 182, 212, 0.5)"
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
                 Featured
-              </span>
+              </motion.span>
             </div>
           )}
 
           {/* Category badge */}
           <div className="absolute top-4 left-4">
-            <span className="px-2 py-1 bg-bg/80 backdrop-blur-sm text-text text-xs font-medium rounded-full border border-border">
+            <motion.span 
+              className="px-2 py-1 bg-bg/90 backdrop-blur-sm text-text text-xs font-medium rounded-full border border-border"
+              whileHover={{ scale: 1.05, borderColor: "rgba(6, 182, 212, 0.5)" }}
+              transition={{ duration: 0.2 }}
+            >
               {project.category}
-            </span>
+            </motion.span>
           </div>
 
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-bg/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* Enhanced Overlay */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-t from-bg/90 via-bg/30 to-transparent"
+            initial={{ opacity: 0 }}
+            whileHover={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          />
           
-          {/* Quick actions */}
-          <div className="absolute bottom-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* Quick actions with enhanced animations */}
+          <motion.div 
+            className="absolute bottom-4 right-4 flex space-x-2"
+            initial={{ opacity: 0, y: 10 }}
+            whileHover={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, staggerChildren: 0.1 }}
+          >
             <motion.a
-              whileHover={{ scale: 1.1 }}
+              initial={{ scale: 0, rotate: -180 }}
+              whileHover={{ 
+                scale: 1.2, 
+                rotate: 0,
+                boxShadow: "0 0 20px rgba(6, 182, 212, 0.4)"
+              }}
               whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 bg-bg/80 backdrop-blur-sm rounded-full text-text hover:text-accent transition-colors"
+              className="p-2 bg-bg/90 backdrop-blur-sm rounded-full text-text hover:text-accent transition-colors"
               aria-label="View live project"
+              onClick={(e) => e.stopPropagation()}
             >
               <ExternalLink className="h-4 w-4" />
             </motion.a>
             
             <motion.a
-              whileHover={{ scale: 1.1 }}
+              initial={{ scale: 0, rotate: 180 }}
+              whileHover={{ 
+                scale: 1.2, 
+                rotate: 0,
+                boxShadow: "0 0 20px rgba(6, 182, 212, 0.4)"
+              }}
               whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 bg-bg/80 backdrop-blur-sm rounded-full text-text hover:text-accent transition-colors"
+              className="p-2 bg-bg/90 backdrop-blur-sm rounded-full text-text hover:text-accent transition-colors"
               aria-label="View source code"
+              onClick={(e) => e.stopPropagation()}
             >
               <Github className="h-4 w-4" />
             </motion.a>
-          </div>
+          </motion.div>
         </div>
 
         {/* Project Content */}
-        <div className="p-6">
-          <h3 className="heading-4 text-text mb-2 group-hover:text-accent transition-colors">
+        <div className="p-6 relative z-10">
+          <motion.h3 
+            className="heading-4 text-text mb-2 group-hover:text-accent transition-colors"
+            whileHover={{ x: 4 }}
+            transition={{ duration: 0.2 }}
+          >
             {project.title}
-          </h3>
+          </motion.h3>
           
           <p className="body-base mb-4 line-clamp-3">
             {project.description}
           </p>
 
-          {/* Technologies */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {project.technologies.slice(0, 4).map((tech) => (
-              <span
+          {/* Technologies with stagger animation */}
+          <motion.div 
+            className="flex flex-wrap gap-2 mb-6"
+            whileHover="hover"
+          >
+            {project.technologies.slice(0, 4).map((tech, techIndex) => (
+              <motion.span
                 key={tech}
-                className="px-2 py-1 bg-bg-secondary border border-border rounded text-xs text-text-secondary"
+                className="px-2 py-1 bg-bg-secondary border border-border rounded text-xs text-text-secondary hover:text-accent hover:border-accent/50 transition-all cursor-default"
+                variants={{
+                  hover: {
+                    scale: 1.05,
+                    transition: {
+                      delay: techIndex * 0.05
+                    }
+                  }
+                }}
+                whileHover={{ 
+                  backgroundColor: "rgba(6, 182, 212, 0.1)",
+                  borderColor: "rgba(6, 182, 212, 0.5)"
+                }}
               >
                 {tech}
-              </span>
+              </motion.span>
             ))}
             {project.technologies.length > 4 && (
-              <span className="px-2 py-1 bg-bg-secondary border border-border rounded text-xs text-accent">
+              <motion.span 
+                className="px-2 py-1 bg-bg-secondary border border-border rounded text-xs text-accent"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+              >
                 +{project.technologies.length - 4} more
-              </span>
+              </motion.span>
             )}
-          </div>
+          </motion.div>
 
-          {/* Actions */}
+          {/* Actions with enhanced animations */}
           <div className="flex items-center justify-between">
             <div className="flex space-x-3">
-              <a
+              <motion.a
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-accent hover:text-accent-hover transition-colors flex items-center space-x-1"
+                whileHover={{ scale: 1.05, x: 2 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <ExternalLink className="h-4 w-4" />
                 <span>Live Demo</span>
-              </a>
+              </motion.a>
               
-              <a
+              <motion.a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-text-secondary hover:text-text transition-colors flex items-center space-x-1"
+                whileHover={{ scale: 1.05, x: 2 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <Github className="h-4 w-4" />
                 <span>Code</span>
-              </a>
+              </motion.a>
             </div>
 
             <motion.button
-              whileHover={{ x: 5 }}
+              whileHover={{ x: 8, scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => onViewDetails(project)}
-              className="text-sm text-accent hover:text-accent-hover transition-colors flex items-center space-x-1"
+              className="group text-sm text-accent hover:text-accent-hover transition-colors flex items-center space-x-1 relative"
             >
               <span>View Details</span>
-              <ArrowRight className="h-4 w-4" />
+              <motion.div
+                animate={{ x: [0, 4, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <ArrowRight className="h-4 w-4" />
+              </motion.div>
+              
+              {/* Underline animation */}
+              <motion.div
+                className="absolute bottom-0 left-0 h-0.5 bg-accent"
+                initial={{ width: 0 }}
+                whileHover={{ width: "100%" }}
+                transition={{ duration: 0.3 }}
+              />
             </motion.button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
+
+// Memoize the component to prevent unnecessary re-renders
+export const ProjectCard = memo(ProjectCardComponent, (prevProps, nextProps) => {
+  return (
+    prevProps.project.id === nextProps.project.id &&
+    prevProps.index === nextProps.index &&
+    prevProps.onViewDetails === nextProps.onViewDetails
+  )
+})
