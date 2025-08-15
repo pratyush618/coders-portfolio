@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Copy, Check } from 'lucide-react'
+import { MermaidDiagram } from '@/components/MermaidDiagram'
 
 interface SimpleMDXRendererProps {
   content: string
@@ -60,29 +61,40 @@ export function SimpleMDXRenderer({ content }: SimpleMDXRendererProps) {
       </a>
     ),
 
-    // Code blocks
-    pre: ({ children }: any) => (
-      <div className="relative group my-6">
-        <pre className="bg-black border border-white/20 rounded-lg p-4 overflow-x-auto">
-          {children}
-        </pre>
-        <button
-          onClick={() => {
-            const code = children?.props?.children
-            if (typeof code === 'string') {
-              copyToClipboard(code)
-            }
-          }}
-          className="copy-button absolute top-3 right-3 p-2 bg-black/50 border border-white/30 rounded text-white/70 hover:text-white hover:bg-white/10 hover:border-white/50 transition-all opacity-0 group-hover:opacity-100"
-        >
-          {copied ? (
-            <Check className="h-4 w-4" />
-          ) : (
-            <Copy className="h-4 w-4" />
-          )}
-        </button>
-      </div>
-    ),
+    // Code blocks with Mermaid support
+    pre: ({ children }: any) => {
+      const codeElement = children?.props
+      const code = codeElement?.children
+      const language = codeElement?.className?.replace('language-', '') || 'text'
+
+      // Handle Mermaid diagrams
+      if (language.toLowerCase() === 'mermaid') {
+        return <MermaidDiagram chart={code} />
+      }
+
+      return (
+        <div className="relative group my-6">
+          <pre className="bg-black border border-white/20 rounded-lg p-4 overflow-x-auto">
+            {children}
+          </pre>
+          <button
+            onClick={() => {
+              const code = children?.props?.children
+              if (typeof code === 'string') {
+                copyToClipboard(code)
+              }
+            }}
+            className="copy-button absolute top-3 right-3 p-2 bg-black/50 border border-white/30 rounded text-white/70 hover:text-white hover:bg-white/10 hover:border-white/50 transition-all opacity-0 group-hover:opacity-100"
+          >
+            {copied ? (
+              <Check className="h-4 w-4" />
+            ) : (
+              <Copy className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+      )
+    },
 
     // Inline code
     code: ({ children, className }: any) => {

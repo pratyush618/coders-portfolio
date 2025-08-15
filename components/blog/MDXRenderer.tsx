@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Copy, Check } from 'lucide-react'
 import Prism from 'prismjs'
+import { MermaidDiagram } from '@/components/MermaidDiagram'
 
 // Import Prism languages
 import 'prismjs/components/prism-javascript'
@@ -96,12 +97,17 @@ export function MDXRenderer({ content }: MDXRendererProps) {
       </a>
     ),
 
-    // Enhanced code blocks with syntax highlighting
+    // Enhanced code blocks with syntax highlighting and Mermaid support
     pre: ({ children }: any) => {
       const codeElement = children?.props
       const code = codeElement?.children
       const language = codeElement?.className?.replace('language-', '') || 'text'
       const normalizedLang = normalizeLanguage(language)
+
+      // Handle Mermaid diagrams
+      if (normalizedLang === 'mermaid') {
+        return <MermaidDiagram chart={code} />
+      }
 
       return (
         <div className="relative group my-8">
