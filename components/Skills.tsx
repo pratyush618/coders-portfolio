@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { 
   Code, 
   Database, 
@@ -9,7 +10,10 @@ import {
   Globe,
   Server,
   Smartphone,
-  Zap
+  Zap,
+  Terminal,
+  Cpu,
+  Binary
 } from 'lucide-react'
 import { siteConfig } from '@/lib/siteConfig'
 import { HolographicCard } from './HolographicCard'
@@ -27,9 +31,36 @@ const skillIcons = {
 }
 
 export function Skills() {
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+
   return (
-    <section id="skills" className="section-padding bg-bg-secondary/30">
-      <div className="container">
+    <section id="skills" className="section-padding bg-bg relative overflow-hidden">
+      {/* Matrix Background Effect */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 left-0 w-full h-full">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-0.5 bg-gradient-to-b from-transparent via-neon-green to-transparent"
+              style={{
+                left: `${(i * 5) + (i * 2)}%`,
+                height: '200%',
+              }}
+              animate={{
+                y: ['-100%', '100%'],
+              }}
+              transition={{
+                duration: 3 + (i % 4),
+                repeat: Infinity,
+                delay: i * 0.2,
+                ease: "linear"
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -43,25 +74,37 @@ export function Skills() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
-              className="heading-2 text-text mb-4 neon-glow"
+              className="heading-2 text-text mb-4"
             >
               <GlitchText intensity="medium" trigger="hover">
-                {'> NEURAL_CAPABILITIES.DAT'}
+                {'> NEURAL_CAPABILITIES.exe'}
               </GlitchText>
             </motion.h2>
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
-              className="body-large max-w-2xl mx-auto"
+              className="flex items-center justify-center space-x-2 mb-6"
             >
-              A comprehensive overview of my technical expertise and the tools I use to bring ideas to life.
+              <Terminal className="h-4 w-4 text-neon-green animate-pulse" />
+              <span className="font-mono text-sm text-neon-green">
+                <GlitchText intensity="low">INITIALIZING SKILL_MATRIX...</GlitchText>
+              </span>
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              viewport={{ once: true }}
+              className="body-large max-w-2xl mx-auto text-text-secondary"
+            >
+              Advanced technical capabilities powered by continuous learning algorithms
             </motion.p>
           </div>
 
-          {/* Skills Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+          {/* Skills Matrix Display */}
+          <div className="grid md:grid-cols-2 gap-8">
             {Object.entries(siteConfig.skills).map(([category, skills], index) => {
               const IconComponent = skillIcons[category as keyof typeof skillIcons] || Code
 
@@ -73,152 +116,157 @@ export function Skills() {
                   transition={{ duration: 0.8, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   className="group"
+                  onMouseEnter={() => setActiveCategory(category)}
+                  onMouseLeave={() => setActiveCategory(null)}
                 >
-                  <HolographicCard 
-                    className="h-full"
-                    intensity={0.7}
-                  >
-                    <div className="p-8 h-full">
-                    {/* Category Header */}
-                    <div className="flex items-center space-x-4 mb-6">
-                      <motion.div 
-                        className="p-3 bg-accent/10 rounded-lg group-hover:bg-accent/20 transition-colors"
-                        whileHover={{ 
-                          scale: 1.1,
-                          rotate: 5,
-                          boxShadow: "0 0 20px rgba(6, 182, 212, 0.3)"
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <IconComponent className="h-6 w-6 text-accent" />
-                      </motion.div>
-                      <motion.h3 
-                        className="heading-4 text-text neon-glow"
-                        whileHover={{ x: 4 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <GlitchText intensity="low" trigger="hover">
-                          {category}
-                        </GlitchText>
-                      </motion.h3>
-                    </div>
-
-                    {/* Skills List with Progress Bars */}
-                    <div className="space-y-4">
-                      {skills.map((skill, skillIndex) => {
-                        // Generate skill level based on position and category for demo
-                        const skillLevel = Math.min(85 + skillIndex * 2, 95)
-                        
-                        return (
-                          <motion.div
-                            key={skill}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ 
-                              duration: 0.5, 
-                              delay: (index * 0.1) + (skillIndex * 0.05) 
+                  <div className="relative">
+                    {/* Terminal-style container */}
+                    <div className="bg-black border border-neon-green/30 rounded-lg overflow-hidden shadow-2xl">
+                      {/* Terminal Header */}
+                      <div className="flex items-center justify-between p-4 bg-bg-secondary border-b border-neon-green/20">
+                        <div className="flex items-center space-x-3">
+                          <motion.div 
+                            className="p-2 bg-neon-green/10 rounded border border-neon-green/30"
+                            whileHover={{ 
+                              scale: 1.05,
+                              boxShadow: "0 0 20px rgba(0, 255, 65, 0.3)"
                             }}
-                            viewport={{ once: true }}
-                            className="group/skill"
+                            transition={{ duration: 0.3 }}
                           >
-                            {/* Skill Name and Level */}
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="body-base group-hover/skill:text-text transition-colors font-medium matrix-text">
-                                <GlitchText intensity="low" trigger="hover">
-                                  {skill}
-                                </GlitchText>
+                            <IconComponent className="h-5 w-5 text-neon-green" />
+                          </motion.div>
+                          <div>
+                            <h3 className="font-mono text-sm text-neon-green">
+                              <GlitchText intensity="low" trigger="hover">
+                                {category.toUpperCase().replace(/\s+/g, '_')}
+                              </GlitchText>
+                            </h3>
+                            <div className="flex items-center space-x-2 mt-1">
+                              <span className="w-2 h-2 bg-neon-green rounded-full animate-pulse"></span>
+                              <span className="font-mono text-xs text-neon-green/70">
+                                ACTIVE
                               </span>
-                              <motion.span 
-                                className="text-xs text-accent font-mono neon-glow"
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                transition={{ delay: (index * 0.1) + (skillIndex * 0.05) + 0.3 }}
-                              >
-                                {skillLevel}%
-                              </motion.span>
                             </div>
-                            
-                            {/* Progress Bar */}
-                            <div className="relative">
-                              <div className="progress-bar h-2">
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-neon-green rounded-full"></div>
+                        </div>
+                      </div>
+
+                      {/* Terminal Content */}
+                      <div className="p-6 bg-black min-h-[300px]">
+                        <div className="space-y-3">
+                          {/* Command prompt */}
+                          <div className="flex items-center space-x-2 mb-4">
+                            <span className="text-neon-green font-mono text-sm">{'>'}</span>
+                            <motion.span 
+                              className="font-mono text-sm text-neon-green"
+                              initial={{ opacity: 0 }}
+                              whileInView={{ opacity: 1 }}
+                              transition={{ delay: index * 0.1 + 0.3 }}
+                            >
+                              ls -la ./skills/{category.toLowerCase().replace(/\s+/g, '_')}
+                            </motion.span>
+                          </div>
+
+                          {/* Skills list in terminal style */}
+                          <div className="space-y-2">
+                            {skills.map((skill, skillIndex) => {
+                              const proficiency = Math.min(85 + skillIndex * 2, 95)
+                              const proficiencyLevel = proficiency > 90 ? 'EXPERT' : proficiency > 75 ? 'ADVANCED' : 'INTERMEDIATE'
+                              const statusColor = proficiency > 90 ? 'text-neon-green' : proficiency > 75 ? 'text-neon-cyan' : 'text-yellow-400'
+                              
+                              return (
                                 <motion.div
-                                  className="progress-fill"
-                                  initial={{ width: 0 }}
-                                  whileInView={{ width: `${skillLevel}%` }}
+                                  key={skill}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  whileInView={{ opacity: 1, x: 0 }}
                                   transition={{ 
-                                    duration: 1.5, 
-                                    delay: (index * 0.1) + (skillIndex * 0.05) + 0.2,
-                                    ease: "easeOut"
+                                    duration: 0.5, 
+                                    delay: (index * 0.1) + (skillIndex * 0.08) + 0.5
                                   }}
                                   viewport={{ once: true }}
-                                />
-                              </div>
-                              
-                              {/* Neon glow effect on hover */}
-                              <motion.div
-                                className="absolute inset-0 bg-accent/30 rounded-full blur-sm opacity-0 group-hover/skill:opacity-100 transition-opacity cyber-border"
-                                style={{ 
-                                  width: `${skillLevel}%`,
-                                  boxShadow: '0 0 15px rgba(6, 182, 212, 0.4)'
-                                }}
-                              />
-                            </div>
-                          </motion.div>
-                        )
-                      })}
-                    </div>
+                                  className="flex items-center justify-between group/skill hover:bg-neon-green/5 p-2 rounded transition-colors"
+                                >
+                                  <div className="flex items-center space-x-3">
+                                    <Binary className="h-3 w-3 text-neon-green/40" />
+                                    <span className="font-mono text-sm text-white group-hover/skill:text-neon-green transition-colors">
+                                      {skill}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center space-x-3">
+                                    <span className={`font-mono text-xs px-2 py-1 rounded border ${statusColor} border-current bg-current/10`}>
+                                      {proficiencyLevel}
+                                    </span>
+                                    <motion.div 
+                                      className="flex space-x-1"
+                                      initial={{ opacity: 0 }}
+                                      whileInView={{ opacity: 1 }}
+                                      transition={{ delay: (index * 0.1) + (skillIndex * 0.08) + 0.8 }}
+                                    >
+                                      {[...Array(5)].map((_, i) => (
+                                        <div
+                                          key={i}
+                                          className={`w-2 h-1 rounded-full ${
+                                            i < Math.floor(proficiency / 20) 
+                                              ? 'bg-neon-green animate-pulse' 
+                                              : 'bg-neon-green/20'
+                                          }`}
+                                        />
+                                      ))}
+                                    </motion.div>
+                                  </div>
+                                </motion.div>
+                              )
+                            })}
+                          </div>
 
-                    {/* Skill Count with Animation */}
-                    <motion.div 
-                      className="mt-6 pt-6 border-t border-border"
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 + 0.8 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-text-secondary">
-                          {skills.length} {skills.length === 1 ? 'skill' : 'skills'}
-                        </span>
-                        
-                        {/* Average skill level indicator */}
-                        <motion.div className="flex items-center space-x-2">
-                          <span className="text-xs text-text-secondary">Avg:</span>
-                          <motion.div
-                            className="w-16 h-1 bg-accent/20 rounded-full overflow-hidden"
-                            initial={{ width: 0 }}
-                            whileInView={{ width: '100%' }}
-                            transition={{ duration: 1, delay: index * 0.1 + 1 }}
-                            viewport={{ once: true }}
-                          >
-                            <motion.div
-                              className="h-full bg-accent rounded-full"
-                              initial={{ width: 0 }}
-                              whileInView={{ width: '89%' }}
-                              transition={{ duration: 1.5, delay: index * 0.1 + 1.2 }}
-                              viewport={{ once: true }}
-                            />
-                          </motion.div>
-                          <motion.span 
-                            className="text-xs text-accent font-mono"
+                          {/* Terminal footer */}
+                          <motion.div 
+                            className="flex items-center space-x-2 mt-6 pt-4 border-t border-neon-green/20"
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
-                            transition={{ delay: index * 0.1 + 2 }}
+                            transition={{ duration: 0.5, delay: index * 0.1 + 1.5 }}
                             viewport={{ once: true }}
                           >
-                            89%
-                          </motion.span>
-                        </motion.div>
+                            <span className="text-neon-green font-mono text-sm">{'>'}</span>
+                            <span className="font-mono text-xs text-neon-green/70">
+                              {skills.length} modules loaded | Status: OPERATIONAL
+                            </span>
+                          </motion.div>
+                        </div>
                       </div>
-                    </motion.div>
                     </div>
-                  </HolographicCard>
+
+                    {/* Glowing effect when active */}
+                    {activeCategory === category && (
+                      <motion.div
+                        className="absolute inset-0 border-2 border-neon-green rounded-lg pointer-events-none"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ 
+                          opacity: [0.3, 0.7, 0.3],
+                          scale: [0.98, 1, 0.98],
+                        }}
+                        transition={{ 
+                          duration: 2, 
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                        style={{
+                          boxShadow: '0 0 30px rgba(0, 255, 65, 0.3), inset 0 0 30px rgba(0, 255, 65, 0.1)'
+                        }}
+                      />
+                    )}
+                  </div>
                 </motion.div>
               )
             })}
           </div>
 
-          {/* Additional Skills Info */}
+          {/* System Summary */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -226,78 +274,99 @@ export function Skills() {
             viewport={{ once: true }}
             className="mt-16"
           >
-            <HolographicCard className="text-center" intensity={0.4}>
-              <div className="p-8">
-              <h3 className="heading-3 text-text mb-4 neon-glow">
-                <GlitchText intensity="medium" trigger="hover">
-                  {'> CONTINUOUS_EVOLUTION.SYS'}
-                </GlitchText>
-              </h3>
-              <p className="body-large mb-8 max-w-3xl mx-auto">
-                Technology evolves rapidly, and I'm committed to staying current with the latest 
-                tools, frameworks, and best practices. I'm always exploring new technologies and 
-                methodologies to enhance my development capabilities.
-              </p>
-
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="p-4 bg-bg-secondary rounded-lg cyber-border holographic">
-                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3 neon-glow">
-                    <Code className="h-6 w-6 text-accent" />
-                  </div>
-                  <h4 className="font-semibold text-text mb-2 matrix-text">
-                    <GlitchText intensity="low" trigger="hover">
-                      Clean Code
+            <div className="bg-black border border-neon-green/30 rounded-lg overflow-hidden">
+              {/* System Header */}
+              <div className="p-4 bg-bg-secondary border-b border-neon-green/20">
+                <div className="flex items-center space-x-3">
+                  <Cpu className="h-5 w-5 text-neon-green animate-pulse" />
+                  <h3 className="font-mono text-neon-green">
+                    <GlitchText intensity="medium" trigger="hover">
+                      SYSTEM_CORE_PRINCIPLES.exe
                     </GlitchText>
-                  </h4>
-                  <p className="body-small">
-                    Writing maintainable, readable, and efficient code
-                  </p>
-                </div>
-
-                <div className="p-4 bg-bg-secondary rounded-lg cyber-border holographic">
-                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3 neon-glow">
-                    <Zap className="h-6 w-6 text-accent" />
-                  </div>
-                  <h4 className="font-semibold text-text mb-2 matrix-text">
-                    <GlitchText intensity="low" trigger="hover">
-                      Performance
-                    </GlitchText>
-                  </h4>
-                  <p className="body-small">
-                    Optimizing applications for speed and efficiency
-                  </p>
-                </div>
-
-                <div className="p-4 bg-bg-secondary rounded-lg cyber-border holographic">
-                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3 neon-glow">
-                    <Globe className="h-6 w-6 text-accent" />
-                  </div>
-                  <h4 className="font-semibold text-text mb-2 matrix-text">
-                    <GlitchText intensity="low" trigger="hover">
-                      Accessibility
-                    </GlitchText>
-                  </h4>
-                  <p className="body-small">
-                    Building inclusive web experiences for all users
-                  </p>
-                </div>
-
-                <div className="p-4 bg-bg-secondary rounded-lg cyber-border holographic">
-                  <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-lg mx-auto mb-3 neon-glow">
-                    <Palette className="h-6 w-6 text-accent" />
-                  </div>
-                  <h4 className="font-semibold text-text mb-2 matrix-text">
-                    <GlitchText intensity="low" trigger="hover">
-                      UX Focus
-                    </GlitchText>
-                  </h4>
-                  <p className="body-small">
-                    Prioritizing user experience in every design decision
-                  </p>
+                  </h3>
                 </div>
               </div>
+
+              <div className="p-8">
+                {/* System Description */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.8 }}
+                  viewport={{ once: true }}
+                  className="mb-8 text-center"
+                >
+                  <div className="flex items-center justify-center space-x-2 mb-4">
+                    <span className="text-neon-green font-mono text-sm">{'>'}</span>
+                    <motion.span 
+                      className="font-mono text-sm text-neon-green"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: "auto" }}
+                      transition={{ duration: 2, delay: 0.9 }}
+                    >
+                      cat ./core/philosophy.txt
+                    </motion.span>
+                  </div>
+                  <p className="text-text-secondary max-w-3xl mx-auto">
+                    Continuous evolution through adaptive learning algorithms. 
+                    Committed to engineering excellence and user-centric innovation.
+                  </p>
+                </motion.div>
+
+                {/* Core Principles Grid */}
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[
+                    { icon: Code, title: "CLEAN_CODE", desc: "Maintainable, readable, efficient algorithms" },
+                    { icon: Zap, title: "PERFORMANCE", desc: "Optimized execution and resource management" },
+                    { icon: Globe, title: "ACCESSIBILITY", desc: "Universal design patterns and inclusive UX" },
+                    { icon: Palette, title: "UX_FIRST", desc: "Human-centered interface architecture" }
+                  ].map((principle, index) => (
+                    <motion.div
+                      key={principle.title}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 1 + (index * 0.1) }}
+                      viewport={{ once: true }}
+                      className="group hover:bg-neon-green/5 p-4 rounded border border-neon-green/20 transition-all"
+                    >
+                      <div className="flex items-center space-x-3 mb-3">
+                        <motion.div
+                          className="p-2 bg-neon-green/10 rounded border border-neon-green/30"
+                          whileHover={{ 
+                            scale: 1.1,
+                            boxShadow: "0 0 20px rgba(0, 255, 65, 0.3)"
+                          }}
+                        >
+                          <principle.icon className="h-4 w-4 text-neon-green" />
+                        </motion.div>
+                        <h4 className="font-mono text-sm text-neon-green group-hover:text-white transition-colors">
+                          <GlitchText intensity="low" trigger="hover">
+                            {principle.title}
+                          </GlitchText>
+                        </h4>
+                      </div>
+                      <p className="text-xs text-text-secondary group-hover:text-text transition-colors">
+                        {principle.desc}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* System Status */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 1.5 }}
+                  viewport={{ once: true }}
+                  className="flex items-center justify-center space-x-2 mt-8 pt-6 border-t border-neon-green/20"
+                >
+                  <span className="text-neon-green font-mono text-sm">{'>'}</span>
+                  <span className="font-mono text-xs text-neon-green/70">
+                    System status: OPTIMAL | Learning mode: ACTIVE | Ready for deployment
+                  </span>
+                </motion.div>
+              </div>
             </div>
-            </HolographicCard>
           </motion.div>
         </motion.div>
       </div>
