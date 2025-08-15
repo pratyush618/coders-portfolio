@@ -1,0 +1,264 @@
+---
+title: 'Complete Guide to Mermaid Diagrams'
+date: '2024-01-20'
+description: 'Learn how to create beautiful diagrams using Mermaid syntax in your blog posts. From flowcharts to sequence diagrams, this guide covers everything you need to know.'
+tags: ['Documentation', 'Mermaid', 'Diagrams', 'Visualization']
+featured: true
+draft: false
+---
+
+# Complete Guide to Mermaid Diagrams
+
+Mermaid is a powerful diagramming and charting tool that uses simple text syntax to create complex visualizations. This guide demonstrates various types of diagrams you can create in your blog posts.
+
+## Flowcharts
+
+Flowcharts are perfect for showing processes, decision trees, and workflows:
+
+```mermaid
+flowchart TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Debug]
+    D --> E[Fix Issues]
+    E --> B
+    C --> F[Deploy]
+    F --> G[End]
+```
+
+## Sequence Diagrams
+
+Sequence diagrams are excellent for showing interactions between different actors or systems:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant API
+    participant Database
+    
+    User->>Frontend: Submit Form
+    Frontend->>API: POST /api/data
+    API->>Database: INSERT query
+    Database-->>API: Success
+    API-->>Frontend: 201 Created
+    Frontend-->>User: Success Message
+```
+
+## Class Diagrams
+
+Visualize object-oriented design with class diagrams:
+
+```mermaid
+classDiagram
+    class BlogPost {
+        +String title
+        +String content
+        +Date publishedAt
+        +Boolean featured
+        +publish()
+        +unpublish()
+    }
+    
+    class Author {
+        +String name
+        +String email
+        +Array~BlogPost~ posts
+        +createPost()
+        +deletePost()
+    }
+    
+    class Tag {
+        +String name
+        +String slug
+        +String color
+    }
+    
+    Author ||--o{ BlogPost : writes
+    BlogPost }|--|| Tag : has
+```
+
+## State Diagrams
+
+Show state transitions and system behavior:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> Review : submit
+    Review --> Published : approve
+    Review --> Draft : reject
+    Published --> Archived : archive
+    Archived --> Published : restore
+    Published --> [*] : delete
+```
+
+## Gantt Charts
+
+Perfect for project planning and timeline visualization:
+
+```mermaid
+gantt
+    title Website Development Timeline
+    dateFormat  YYYY-MM-DD
+    section Planning
+    Research & Requirements    :done,    planning, 2024-01-01, 2024-01-07
+    Design Mockups            :done,    design, 2024-01-05, 2024-01-15
+    section Development
+    Frontend Setup            :done,    frontend, 2024-01-10, 2024-01-20
+    API Development           :active,  api, 2024-01-18, 2024-02-05
+    Database Setup            :         db, 2024-01-25, 2024-02-02
+    section Testing
+    Unit Testing              :         testing, 2024-02-01, 2024-02-10
+    Integration Testing       :         integration, 2024-02-08, 2024-02-15
+    section Deployment
+    Production Setup          :         prod, 2024-02-12, 2024-02-18
+```
+
+## Pie Charts
+
+Simple and effective for showing data distribution:
+
+```mermaid
+pie title Programming Languages Used
+    "TypeScript" : 40
+    "JavaScript" : 25
+    "Python" : 20
+    "Go" : 10
+    "Rust" : 5
+```
+
+## Git Graphs
+
+Visualize Git branching and merging strategies:
+
+```mermaid
+gitgraph
+    commit id: "Initial"
+    branch develop
+    checkout develop
+    commit id: "Feature A"
+    commit id: "Feature B"
+    checkout main
+    merge develop
+    commit id: "Release v1.0"
+    branch hotfix
+    checkout hotfix
+    commit id: "Bug Fix"
+    checkout main
+    merge hotfix
+    commit id: "v1.0.1"
+```
+
+## User Journey Maps
+
+Map out user experiences and touchpoints:
+
+```mermaid
+journey
+    title User Blog Reading Journey
+    section Discovery
+      Search for Topic        : 5: User
+      Find Blog Post         : 4: User
+      Click on Link          : 3: User
+    section Reading
+      Load Page              : 2: User, System
+      Read Introduction      : 5: User
+      View Diagrams          : 5: User
+      Read Content           : 4: User
+    section Engagement
+      Share Post             : 5: User
+      Leave Comment          : 3: User
+      Subscribe              : 4: User
+```
+
+## Mind Maps
+
+Organize ideas and concepts visually:
+
+```mermaid
+mindmap
+  root((Web Development))
+    Frontend
+      React
+        Hooks
+        Context
+        Components
+      Vue
+        Vuex
+        Router
+      Angular
+        Services
+        Modules
+    Backend
+      Node.js
+        Express
+        Fastify
+      Python
+        Django
+        Flask
+      Go
+        Gin
+        Fiber
+    Database
+      SQL
+        PostgreSQL
+        MySQL
+      NoSQL
+        MongoDB
+        Redis
+```
+
+## Timeline Diagrams
+
+Show events in chronological order:
+
+```mermaid
+timeline
+    title Web Development Evolution
+    section Early Web
+        1990 : World Wide Web invented
+        1993 : First web browser
+        1995 : JavaScript created
+    section Modern Era
+        2006 : jQuery released
+        2010 : Angular.js launched
+        2013 : React.js introduced
+    section Current
+        2020 : Next.js 10 released
+        2023 : React 18 stable
+        2024 : Modern frameworks mature
+```
+
+## Advanced Features
+
+### Custom Styling
+
+Mermaid diagrams automatically inherit your site's dark theme with custom colors:
+
+- **Primary Color**: Cyan (#06b6d4)
+- **Background**: True black (#000000)
+- **Text**: White (#ffffff)
+- **Borders**: Dark gray (#27272a)
+
+### Interactive Features
+
+Each diagram comes with built-in features:
+
+1. **Copy Source**: Hover over a diagram to copy the Mermaid source code
+2. **Download SVG**: Export diagrams as scalable vector graphics
+3. **Fullscreen View**: Click to view diagrams in fullscreen mode
+4. **Error Handling**: Clear error messages for syntax issues
+
+### Best Practices
+
+1. **Keep it Simple**: Start with basic diagrams and add complexity gradually
+2. **Use Meaningful Labels**: Make node and edge labels descriptive
+3. **Consistent Styling**: Stick to a consistent naming convention
+4. **Test Syntax**: Verify your diagrams render correctly before publishing
+
+## Conclusion
+
+Mermaid diagrams are a powerful way to enhance your technical blog posts. They provide visual clarity to complex concepts and make your content more engaging. Experiment with different diagram types to find what works best for your content!
+
+For more advanced features and syntax options, check out the [official Mermaid documentation](https://mermaid.js.org/).
