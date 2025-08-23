@@ -3,6 +3,16 @@ import { Inter, Space_Mono } from 'next/font/google'
 import './globals.css'
 import { siteConfig } from '@/lib/siteConfig'
 import { ScrollProgress } from '@/components/ScrollProgress'
+import { CommandPaletteProvider } from '@/components/CommandPaletteProvider'
+import { ThemeCustomizer } from '@/components/ThemeCustomizer'
+import { ServiceWorkerProvider } from '@/components/ServiceWorkerProvider'
+import { PWAInstallPrompt } from '@/components/PWAInstallPrompt'
+import { PerformanceMonitor } from '@/components/PerformanceMonitor'
+import { DebugPanel } from '@/components/DebugPanel'
+import { MobileGestureOverlay } from '@/components/MobileGestureOverlay'
+import { SearchProvider } from '@/components/SearchProvider'
+import { SearchModal } from '@/components/SearchModal'
+import { MagneticCursor } from '@/components/MagneticCursor'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -97,10 +107,21 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${spaceMono.variable} font-mono bg-bg text-text antialiased`}
       >
-        <ScrollProgress />
-        <div className="relative flex min-h-screen flex-col">
-          <main className="flex-1">{children}</main>
-        </div>
+        <SearchProvider>
+          <MagneticCursor />
+          <ScrollProgress />
+          <CommandPaletteProvider />
+          <ThemeCustomizer />
+          <ServiceWorkerProvider />
+          <PWAInstallPrompt />
+          <MobileGestureOverlay />
+          <SearchModal />
+          {process.env.NODE_ENV === 'production' && <PerformanceMonitor />}
+          {process.env.NODE_ENV === 'development' && <DebugPanel />}
+          <div className="relative flex min-h-screen flex-col">
+            <main className="flex-1">{children}</main>
+          </div>
+        </SearchProvider>
       </body>
     </html>
   )

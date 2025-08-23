@@ -58,11 +58,15 @@ export function estimateReadingTime(content: string): number {
 }
 
 export function extractMetaFromMdx(content: string) {
-  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/)
+  // Try different regex patterns to handle different line endings
+  const frontmatterMatch = content.match(/^---\r?\n([\s\S]*?)\r?\n---/) || 
+                           content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/) ||
+                           content.match(/^---\s*\n([\s\S]*?)\n---/)
+  
   if (!frontmatterMatch) return { content, meta: {} }
 
   const frontmatter = frontmatterMatch[1]
-  const contentWithoutFrontmatter = content.replace(/^---\n([\s\S]*?)\n---\n?/, '')
+  const contentWithoutFrontmatter = content.replace(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/, '')
   
   // Simple frontmatter parser
   const meta: Record<string, any> = {}

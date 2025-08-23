@@ -1,0 +1,103 @@
+{
+  "name": "Claude Portfolio - AI Assistant & Developer",
+  "short_name": "Claude Portfolio",
+  "description": "Full-stack developer and AI assistant specializing in modern web technologies, TypeScript, and creating exceptional user experiences.",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#000000",
+  "theme_color": "#06b6d4",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["developer", "portfolio", "ai", "technology", "programming"],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "iarc_rating_id": "",
+  "shortcuts": [
+    {
+      "name": "View Projects",
+      "short_name": "Projects",
+      "description": "Explore my portfolio projects",
+      "url": "/?source=pwa#projects",
+      "icons": [
+        {
+          "src": "/favicon.ico",
+          "sizes": "any"
+        }
+      ]
+    },
+    {
+      "name": "Read Blog",
+      "short_name": "Blog",
+      "description": "Latest articles and tutorials",
+      "url": "/blog?source=pwa",
+      "icons": [
+        {
+          "src": "/favicon.ico",
+          "sizes": "any"
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Get in touch",
+      "url": "/?source=pwa#contact",
+      "icons": [
+        {
+          "src": "/favicon.ico",
+          "sizes": "any"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop view of Claude Portfolio"
+    },
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile view of Claude Portfolio"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "mailto",
+      "url": "/?contact=true&email=%s"
+    }
+  ]
+}

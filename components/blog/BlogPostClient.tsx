@@ -6,6 +6,9 @@ import { ArrowLeft, Calendar, Clock, Tag, Share, Copy, Check } from 'lucide-reac
 import Link from 'next/link'
 import { BlogPost } from '@/lib/database'
 import { SimpleMDXRenderer } from './SimpleMDXRenderer'
+import { TableOfContents } from './TableOfContents'
+import { ReadingProgress } from './ReadingProgress'
+import { BlogPostStructuredData } from '../StructuredData'
 
 interface BlogPostClientProps {
   post: BlogPost
@@ -53,7 +56,14 @@ export function BlogPostClient({ post, relatedPosts }: BlogPostClientProps) {
   }
 
   return (
-    <article className="container mx-auto px-4 py-16 max-w-4xl">
+    <>
+      {/* Structured Data for SEO */}
+      <BlogPostStructuredData post={post} />
+      
+      {/* Reading Progress Bar */}
+      <ReadingProgress target=".blog-content" position="top" />
+      
+      <article className="container mx-auto px-4 py-16 max-w-4xl">
       {/* Back Button */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -147,6 +157,9 @@ export function BlogPostClient({ post, relatedPosts }: BlogPostClientProps) {
           </div>
         )}
       </motion.header>
+
+      {/* Table of Contents */}
+      <TableOfContents content={post.content} />
 
       {/* Article Content */}
       <motion.div
@@ -255,5 +268,6 @@ export function BlogPostClient({ post, relatedPosts }: BlogPostClientProps) {
         </div>
       </motion.section>
     </article>
+    </>
   )
 }

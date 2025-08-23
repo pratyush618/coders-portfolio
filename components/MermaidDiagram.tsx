@@ -22,10 +22,10 @@ export function MermaidDiagram({ chart, title }: MermaidDiagramProps) {
         setError(null)
 
         // Dynamically import mermaid to avoid SSR issues
-        const mermaid = await import('mermaid')
+        const mermaid = (await import('mermaid')).default
         
         // Configure mermaid for dark theme
-        mermaid.default.initialize({
+        mermaid.initialize({
           theme: 'dark',
           themeVariables: {
             primaryColor: '#06b6d4',
@@ -108,7 +108,7 @@ export function MermaidDiagram({ chart, title }: MermaidDiagramProps) {
           const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`
           
           // Render the diagram
-          const { svg } = await mermaid.default.render(id, chart)
+          const { svg } = await mermaid.render(id, chart)
           ref.current.innerHTML = svg
 
           // Style the SVG for better integration

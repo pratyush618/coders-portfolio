@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { blogDb } from '@/lib/database'
+import { getPostBySlug } from '@/lib/blog-loader'
 import { validateAuth, createAuthResponse, createErrorResponse, createSuccessResponse } from '@/lib/auth'
 import { generateSlug, estimateReadingTime } from '@/lib/mdx-utils'
 
@@ -13,7 +14,7 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { slug } = await params
-    const post = await blogDb.getPostBySlug(slug)
+    const post = await getPostBySlug(slug)
     
     if (!post) {
       return createErrorResponse('Post not found', 404)
@@ -41,10 +42,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const { slug } = await params
     const body = await request.json()
     
-    // Check if post exists
+    // Check if post exists and is a database post (not MDX)
     const existingPost = await blogDb.getPostBySlug(slug)
     if (!existingPost) {
-      return createErrorResponse('Post not found', 404)
+      return createErrorResponse('Post not found or cannot be edited (MDX files must be edited directly)', 404)
     }
 
     // Prepare update data
@@ -106,10 +107,10 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const { slug } = await params
     
-    // Check if post exists
+    // Check if post exists and is a database post (not MDX)
     const existingPost = await blogDb.getPostBySlug(slug)
     if (!existingPost) {
-      return createErrorResponse('Post not found', 404)
+      return createErrorResponse('Post not found or cannot be deleted (MDX files must be deleted directly)', 404)
     }
 
     // Delete the post

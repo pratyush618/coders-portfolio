@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { blogDb } from '@/lib/database'
+import { getPostBySlug, getPublishedPosts } from '@/lib/blog-loader'
 import { BlogPostClient } from '@/components/blog/BlogPostClient'
 import { siteConfig } from '@/lib/siteConfig'
 
@@ -12,7 +12,7 @@ interface BlogPostPageProps {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params
-  const post = await blogDb.getPostBySlug(slug)
+  const post = await getPostBySlug(slug)
   
   if (!post) {
     return {
@@ -48,14 +48,14 @@ export const dynamic = 'force-dynamic'
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params
-  const post = await blogDb.getPostBySlug(slug)
+  const post = await getPostBySlug(slug)
   
   if (!post) {
     notFound()
   }
 
   // Get related posts (same tags, excluding current post)
-  const allPosts = await blogDb.getPublishedPosts()
+  const allPosts = await getPublishedPosts()
   const relatedPosts = allPosts
     .filter(p => p.id !== post.id && p.tags?.some(tag => 
       post.tags?.some(postTag => postTag.id === tag.id)

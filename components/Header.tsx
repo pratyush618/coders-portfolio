@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { siteConfig } from '@/lib/siteConfig'
 import { cn, scrollToElement } from '@/lib/utils'
+import { SearchButton } from './SearchButton'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -46,7 +47,8 @@ export function Header() {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6">
+            <SearchButton />
             {siteConfig.navigation.map((item, index) => (
               <motion.button
                 key={item.name}

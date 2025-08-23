@@ -10,6 +10,11 @@ import {
   ProjectsWithSuspense, 
   ContactFormWithSuspense 
 } from '@/components/LazyComponents'
+import { 
+  PersonStructuredData, 
+  WebSiteStructuredData, 
+  PortfolioStructuredData 
+} from '@/components/StructuredData'
 
 // Enable dynamic rendering to show new blog posts immediately
 export const dynamic = 'force-dynamic'
@@ -17,6 +22,11 @@ export const dynamic = 'force-dynamic'
 export default function HomePage() {
   return (
     <>
+      {/* Structured Data for SEO */}
+      <PersonStructuredData />
+      <WebSiteStructuredData />
+      <PortfolioStructuredData />
+      
       <Header />
       <Hero />
       <About />

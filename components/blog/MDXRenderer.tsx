@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Copy, Check } from 'lucide-react'
 import Prism from 'prismjs'
-import { MermaidDiagram } from '@/components/MermaidDiagram'
+import { SimpleMermaid } from '@/components/SimpleMermaid'
 
 // Import Prism languages
 import 'prismjs/components/prism-javascript'
@@ -59,26 +59,78 @@ export function MDXRenderer({ content }: MDXRendererProps) {
     return languageMap[lang?.toLowerCase()] || lang?.toLowerCase() || 'text'
   }
 
+  // Helper function to generate heading IDs
+  const generateHeadingId = (text: string): string => {
+    if (typeof text !== 'string') {
+      // Handle cases where children might be React elements
+      const textContent = React.Children.toArray(text).map((child) => {
+        if (typeof child === 'string') return child
+        if (React.isValidElement(child) && child.props && child.props.children) {
+          return child.props.children
+        }
+        return ''
+      }).join('')
+      text = textContent
+    }
+    
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+  }
+
   const components = {
-    // Headers with proper styling
-    h1: ({ children }: any) => (
-      <h1 className="text-4xl md:text-5xl font-bold text-text mb-8 mt-12 leading-tight">{children}</h1>
-    ),
-    h2: ({ children }: any) => (
-      <h2 className="text-3xl md:text-4xl font-bold text-text mb-6 mt-10 leading-tight">{children}</h2>
-    ),
-    h3: ({ children }: any) => (
-      <h3 className="text-2xl md:text-3xl font-bold text-text mb-4 mt-8 leading-tight">{children}</h3>
-    ),
-    h4: ({ children }: any) => (
-      <h4 className="text-xl md:text-2xl font-bold text-text mb-4 mt-6 leading-tight">{children}</h4>
-    ),
-    h5: ({ children }: any) => (
-      <h5 className="text-lg md:text-xl font-bold text-text mb-3 mt-6 leading-tight">{children}</h5>
-    ),
-    h6: ({ children }: any) => (
-      <h6 className="text-base md:text-lg font-bold text-text mb-3 mt-4 leading-tight">{children}</h6>
-    ),
+    // Headers with proper styling and IDs
+    h1: ({ children }: any) => {
+      const id = generateHeadingId(children)
+      return (
+        <h1 id={id} className="text-4xl md:text-5xl font-bold text-text mb-8 mt-12 leading-tight">
+          {children}
+        </h1>
+      )
+    },
+    h2: ({ children }: any) => {
+      const id = generateHeadingId(children)
+      return (
+        <h2 id={id} className="text-3xl md:text-4xl font-bold text-text mb-6 mt-10 leading-tight">
+          {children}
+        </h2>
+      )
+    },
+    h3: ({ children }: any) => {
+      const id = generateHeadingId(children)
+      return (
+        <h3 id={id} className="text-2xl md:text-3xl font-bold text-text mb-4 mt-8 leading-tight">
+          {children}
+        </h3>
+      )
+    },
+    h4: ({ children }: any) => {
+      const id = generateHeadingId(children)
+      return (
+        <h4 id={id} className="text-xl md:text-2xl font-bold text-text mb-4 mt-6 leading-tight">
+          {children}
+        </h4>
+      )
+    },
+    h5: ({ children }: any) => {
+      const id = generateHeadingId(children)
+      return (
+        <h5 id={id} className="text-lg md:text-xl font-bold text-text mb-3 mt-6 leading-tight">
+          {children}
+        </h5>
+      )
+    },
+    h6: ({ children }: any) => {
+      const id = generateHeadingId(children)
+      return (
+        <h6 id={id} className="text-base md:text-lg font-bold text-text mb-3 mt-4 leading-tight">
+          {children}
+        </h6>
+      )
+    },
 
     // Paragraphs with proper spacing
     p: ({ children }: any) => (
@@ -106,7 +158,7 @@ export function MDXRenderer({ content }: MDXRendererProps) {
 
       // Handle Mermaid diagrams
       if (normalizedLang === 'mermaid') {
-        return <MermaidDiagram chart={code} />
+        return <SimpleMermaid chart={code} />
       }
 
       return (

@@ -11,6 +11,12 @@
     --accent: 188 100% 42%;
     --accent-hover: 188 85% 35%;
     --border: 240 6% 15%;
+    
+    /* Theme Customizer Variables */
+    --accent-color: #06b6d4;
+    --accent-glow: #06b6d440;
+    --animation-speed: 1;
+    --animation-duration: inherit;
   }
 
   * {
@@ -466,5 +472,39 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  
+  /* Theme Customizer Utilities */
+  .reduce-motion,
+  .reduce-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .no-glow {
+    --accent-glow: transparent;
+  }
+  
+  .no-glow *[style*="box-shadow"] {
+    box-shadow: none !important;
+  }
+  
+  /* Dynamic accent color utilities */
+  .accent-dynamic {
+    color: var(--accent-color) !important;
+  }
+  
+  .bg-accent-dynamic {
+    background-color: var(--accent-color) !important;
+  }
+  
+  .border-accent-dynamic {
+    border-color: var(--accent-color) !important;
+  }
+  
+  .glow-accent-dynamic {
+    box-shadow: 0 0 20px var(--accent-glow) !important;
   }
 }

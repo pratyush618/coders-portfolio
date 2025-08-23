@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { blogDb } from '@/lib/database'
+import { getAllPosts, getPublishedPosts } from '@/lib/blog-loader'
 import { validateAuth, createAuthResponse, createErrorResponse, createSuccessResponse } from '@/lib/auth'
 import { generateSlug, estimateReadingTime } from '@/lib/mdx-utils'
 
@@ -14,10 +15,10 @@ export async function GET(request: NextRequest) {
       if (!validateAuth(request)) {
         return createAuthResponse()
       }
-      const posts = await blogDb.getAllPosts()
+      const posts = await getAllPosts()
       return createSuccessResponse({ posts })
     } else {
-      const posts = await blogDb.getPublishedPosts()
+      const posts = await getPublishedPosts()
       return createSuccessResponse({ posts })
     }
   } catch (error) {
