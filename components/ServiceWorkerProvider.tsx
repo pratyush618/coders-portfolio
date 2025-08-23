@@ -22,7 +22,7 @@ export function ServiceWorkerProvider() {
     isRegistered: false,
     isSupported: false,
     hasUpdate: false,
-    isOnline: navigator?.onLine ?? true,
+    isOnline: true,
     cacheSize: 0
   })
   
@@ -31,7 +31,8 @@ export function ServiceWorkerProvider() {
   useEffect(() => {
     // Check if service worker is supported
     const isSupported = typeof navigator !== 'undefined' && 'serviceWorker' in navigator
-    setState(prev => ({ ...prev, isSupported }))
+    const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true
+    setState(prev => ({ ...prev, isSupported, isOnline }))
     
     if (!isSupported) {
       console.log('[SW] Service Worker not supported in this browser')
@@ -49,6 +50,12 @@ export function ServiceWorkerProvider() {
   }, [])
 
   const registerServiceWorker = async () => {
+    // Double-check that we have access to navigator and serviceWorker
+    if (typeof navigator === 'undefined' || !navigator.serviceWorker) {
+      console.log('[SW] Service worker not available')
+      return
+    }
+
     try {
       console.log('[SW] Registering service worker...')
       
@@ -66,22 +73,24 @@ export function ServiceWorkerProvider() {
       await checkForUpdates(reg)
       
       // Set up update listeners
-      reg.addEventListener('updatefound', () => {
-        console.log('[SW] Update found!')
-        const newWorker = reg.installing
-        
-        if (newWorker) {
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              console.log('[SW] New version available')
-              setState(prev => ({ ...prev, hasUpdate: true }))
-              
-              // Show update notification
-              showUpdateNotification()
-            }
-          })
-        }
-      })
+      if (reg && reg.addEventListener) {
+        reg.addEventListener('updatefound', () => {
+          console.log('[SW] Update found!')
+          const newWorker = reg.installing
+          
+          if (newWorker && newWorker.addEventListener) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker && navigator.serviceWorker.controller) {
+                console.log('[SW] New version available')
+                setState(prev => ({ ...prev, hasUpdate: true }))
+                
+                // Show update notification
+                showUpdateNotification()
+              }
+            })
+          }
+        })
+      }
       
     } catch (error) {
       console.error('[SW] Registration failed:', error)
@@ -89,6 +98,11 @@ export function ServiceWorkerProvider() {
   }
 
   const setupEventListeners = () => {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+      return
+    }
+
     // Listen for online/offline changes
     window.addEventListener('online', () => {
       setState(prev => ({ ...prev, isOnline: true }))
@@ -101,13 +115,15 @@ export function ServiceWorkerProvider() {
     })
     
     // Listen for service worker messages
-    navigator.serviceWorker.addEventListener('message', (event) => {
-      const { type, size } = event.data
-      
-      if (type === 'CACHE_SIZE') {
-        setState(prev => ({ ...prev, cacheSize: size }))
-      }
-    })
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        const { type, size } = event.data
+        
+        if (type === 'CACHE_SIZE') {
+          setState(prev => ({ ...prev, cacheSize: size }))
+        }
+      })
+    }
   }
 
   const checkForUpdates = async (reg: ServiceWorkerRegistration) => {
@@ -258,13 +274,18 @@ export function ServiceWorkerProvider() {
 export function useServiceWorker() {
   const [state, setState] = useState<ServiceWorkerState>({
     isRegistered: false,
-    isSupported: 'serviceWorker' in navigator,
+    isSupported: typeof navigator !== 'undefined' && 'serviceWorker' in navigator,
     hasUpdate: false,
-    isOnline: navigator?.onLine ?? true,
+    isOnline: true,
     cacheSize: 0
   })
 
   useEffect(() => {
+    // Initialize online status
+    if (typeof navigator !== 'undefined') {
+      setState(prev => ({ ...prev, isOnline: navigator.onLine }))
+    }
+    
     // Get state from global service worker context
     const updateState = () => {
       const sw = (window as any).__sw

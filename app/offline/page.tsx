@@ -9,6 +9,41 @@ export default function OfflinePage() {
   useEffect(() => {
     // Update document title
     document.title = 'Offline - Claude Portfolio'
+    
+    // Auto-retry logic - client-side only
+    const handleOnline = () => {
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
+    }
+    
+    // Listen for online event
+    window.addEventListener('online', handleOnline)
+    
+    // Periodic retry
+    let retryCount = 0
+    const maxRetries = 5
+    
+    const periodicRetry = () => {
+      if (retryCount < maxRetries) {
+        fetch('/', { method: 'HEAD' })
+          .then(() => {
+            window.location.reload()
+          })
+          .catch(() => {
+            retryCount++
+            setTimeout(periodicRetry, 10000) // Retry every 10 seconds
+          })
+      }
+    }
+    
+    const retryTimeout = setTimeout(periodicRetry, 5000) // Start after 5 seconds
+    
+    // Cleanup function
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      clearTimeout(retryTimeout)
+    }
   }, [])
   return (
     <div className="min-h-screen bg-bg flex items-center justify-center px-6">
@@ -152,38 +187,6 @@ export default function OfflinePage() {
         </motion.div>
       </div>
 
-      {/* Auto-retry logic */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            // Auto-retry when back online
-            window.addEventListener('online', function() {
-              setTimeout(function() {
-                window.location.reload();
-              }, 1000);
-            });
-            
-            // Periodic retry
-            let retryCount = 0;
-            const maxRetries = 5;
-            
-            function periodicRetry() {
-              if (retryCount < maxRetries) {
-                fetch('/', { method: 'HEAD' })
-                  .then(() => {
-                    window.location.reload();
-                  })
-                  .catch(() => {
-                    retryCount++;
-                    setTimeout(periodicRetry, 10000); // Retry every 10 seconds
-                  });
-              }
-            }
-            
-            setTimeout(periodicRetry, 5000); // Start after 5 seconds
-          `
-        }}
-      />
     </div>
   )
 }

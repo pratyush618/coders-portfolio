@@ -47,11 +47,11 @@ export function useSwipeGestures(options: SwipeGestureOptions = {}) {
   const initialDistance = useRef<number>(0)
 
   const triggerHaptic = (type: 'light' | 'medium' | 'heavy' = 'light') => {
-    if (!enableHaptics) return
+    if (!enableHaptics || typeof navigator === 'undefined' || typeof window === 'undefined') return
 
     try {
       // Modern haptic feedback
-      if ('vibrate' in navigator) {
+      if (navigator && 'vibrate' in navigator && typeof navigator.vibrate === 'function') {
         const patterns = {
           light: [10],
           medium: [50],
@@ -61,11 +61,12 @@ export function useSwipeGestures(options: SwipeGestureOptions = {}) {
       }
 
       // iOS haptic feedback (if available)
-      if ('hapticFeedback' in navigator) {
+      if (navigator && 'hapticFeedback' in navigator) {
         ;(navigator as any).hapticFeedback(type)
       }
     } catch (error) {
       // Haptics not supported, fail silently
+      console.debug('[Haptic] Not supported:', error)
     }
   }
 
@@ -226,22 +227,32 @@ export function useSwipeGestures(options: SwipeGestureOptions = {}) {
     const element = ref.current
     if (!element) return
 
-    // Only add touch listeners on touch-capable devices
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    // Only add touch listeners on touch-capable devices - client-side check
+    if (typeof window === 'undefined' || typeof navigator === 'undefined') return
+    
+    const isTouchDevice = 'ontouchstart' in window || (navigator && navigator.maxTouchPoints && navigator.maxTouchPoints > 0)
 
     if (!isTouchDevice) return
 
-    // Add touch event listeners
-    element.addEventListener('touchstart', handleTouchStart, { passive: !preventDefault })
-    element.addEventListener('touchmove', handleTouchMove, { passive: !preventDefault })
-    element.addEventListener('touchend', handleTouchEnd, { passive: !preventDefault })
-    element.addEventListener('touchcancel', handleTouchCancel, { passive: true })
+    try {
+      // Add touch event listeners
+      element.addEventListener('touchstart', handleTouchStart, { passive: !preventDefault })
+      element.addEventListener('touchmove', handleTouchMove, { passive: !preventDefault })
+      element.addEventListener('touchend', handleTouchEnd, { passive: !preventDefault })
+      element.addEventListener('touchcancel', handleTouchCancel, { passive: true })
 
-    return () => {
-      element.removeEventListener('touchstart', handleTouchStart)
-      element.removeEventListener('touchmove', handleTouchMove)
-      element.removeEventListener('touchend', handleTouchEnd)
-      element.removeEventListener('touchcancel', handleTouchCancel)
+      return () => {
+        try {
+          element.removeEventListener('touchstart', handleTouchStart)
+          element.removeEventListener('touchmove', handleTouchMove)
+          element.removeEventListener('touchend', handleTouchEnd)
+          element.removeEventListener('touchcancel', handleTouchCancel)
+        } catch (error) {
+          console.debug('[Touch] Error removing event listeners:', error)
+        }
+      }
+    } catch (error) {
+      console.debug('[Touch] Error adding event listeners:', error)
     }
   }, [
     onSwipeLeft,
@@ -265,6 +276,8 @@ export function useNavigationGestures() {
   const [currentSection, setCurrentSection] = useState(0)
 
   const scrollToSection = (sectionId: string) => {
+    if (typeof document === 'undefined') return
+    
     const element = document.getElementById(sectionId)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
@@ -297,17 +310,21 @@ export function useNavigationGestures() {
     onSwipeUp: () => navigateToSection('next'),
     onSwipeDown: () => navigateToSection('prev'),
     onSwipeLeft: () => {
-      // Navigate to blog if available
-      if (window.location.pathname === '/') {
-        window.location.href = '/blog'
-      } else {
-        window.history.back()
+      // Navigate to blog if available - client-side only
+      if (typeof window !== 'undefined') {
+        if (window.location.pathname === '/') {
+          window.location.href = '/blog'
+        } else {
+          window.history.back()
+        }
       }
     },
     onSwipeRight: () => {
-      // Navigate back to home if not already there
-      if (window.location.pathname !== '/') {
-        window.location.href = '/'
+      // Navigate back to home if not already there - client-side only
+      if (typeof window !== 'undefined') {
+        if (window.location.pathname !== '/') {
+          window.location.href = '/'
+        }
       }
     },
     threshold: 50,
@@ -316,6 +333,8 @@ export function useNavigationGestures() {
 
   // Update current section based on scroll position
   useEffect(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return
+    
     const handleScroll = () => {
       const windowHeight = window.innerHeight
       const scrollY = window.scrollY

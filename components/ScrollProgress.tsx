@@ -24,28 +24,41 @@ export function ScrollProgress() {
   ]
 
   useEffect(() => {
-    const unsubscribe = scrollYProgress.on('change', (latest) => {
-      // Show progress bar after scrolling 5%
-      setIsVisible(latest > 0.05)
-      
-      // Update progress percentage
-      setProgressPercent(Math.round(latest * 100))
-      
-      // Update current section based on scroll progress
-      if (latest < 0.2) {
-        setCurrentSection('HERO')
-      } else if (latest < 0.4) {
-        setCurrentSection('ABOUT')
-      } else if (latest < 0.6) {
-        setCurrentSection('PROJECTS')
-      } else if (latest < 0.8) {
-        setCurrentSection('SKILLS')
-      } else {
-        setCurrentSection('CONTACT')
-      }
-    })
+    // Only run on client side
+    if (typeof window === 'undefined') return
+    
+    // Check if scrollYProgress is available and has the 'on' method
+    if (!scrollYProgress || typeof scrollYProgress.on !== 'function') {
+      console.debug('[ScrollProgress] scrollYProgress not ready yet')
+      return
+    }
+    
+    try {
+      const unsubscribe = scrollYProgress.on('change', (latest) => {
+        // Show progress bar after scrolling 5%
+        setIsVisible(latest > 0.05)
+        
+        // Update progress percentage
+        setProgressPercent(Math.round(latest * 100))
+        
+        // Update current section based on scroll progress
+        if (latest < 0.2) {
+          setCurrentSection('HERO')
+        } else if (latest < 0.4) {
+          setCurrentSection('ABOUT')
+        } else if (latest < 0.6) {
+          setCurrentSection('PROJECTS')
+        } else if (latest < 0.8) {
+          setCurrentSection('SKILLS')
+        } else {
+          setCurrentSection('CONTACT')
+        }
+      })
 
-    return unsubscribe
+      return unsubscribe
+    } catch (error) {
+      console.error('[ScrollProgress] Error setting up scroll listener:', error)
+    }
   }, [scrollYProgress])
 
   if (!isVisible) return null

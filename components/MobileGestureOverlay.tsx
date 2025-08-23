@@ -20,8 +20,12 @@ export function MobileGestureOverlay() {
   const { gestureRef, currentSection, sections } = useNavigationGestures()
 
   useEffect(() => {
-    // Check if device is mobile
+    // Check if device is mobile - client-side only
     const checkMobile = () => {
+      if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+        return false
+      }
+      
       const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
       const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
       const isSmallScreen = window.innerWidth <= 768
@@ -29,17 +33,20 @@ export function MobileGestureOverlay() {
       return isMobileDevice || (isTouchDevice && isSmallScreen)
     }
 
-    setIsMobile(checkMobile())
+    const isMobileDevice = checkMobile()
+    setIsMobile(isMobileDevice)
 
-    // Check if user has seen gesture tutorial
-    const tutorialSeen = localStorage.getItem('gesture-tutorial-seen')
-    setHasSeenTutorial(!!tutorialSeen)
+    // Check if user has seen gesture tutorial - client-side only
+    if (typeof window !== 'undefined') {
+      const tutorialSeen = localStorage.getItem('gesture-tutorial-seen')
+      setHasSeenTutorial(!!tutorialSeen)
 
-    // Show tutorial for first-time mobile users
-    if (checkMobile() && !tutorialSeen) {
-      setTimeout(() => {
-        setShowGestureHints(true)
-      }, 3000) // Show after 3 seconds
+      // Show tutorial for first-time mobile users
+      if (isMobileDevice && !tutorialSeen) {
+        setTimeout(() => {
+          setShowGestureHints(true)
+        }, 3000) // Show after 3 seconds
+      }
     }
   }, [])
 

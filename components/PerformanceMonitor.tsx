@@ -367,15 +367,21 @@ export function PerformanceMonitor() {
     }
 
     // Listen for Next.js route changes if available
-    if (typeof window !== 'undefined' && (window as any).next) {
-      (window as any).next.router?.events.on('routeChangeStart', handleRouteChangeStart)
-      ;(window as any).next.router?.events.on('routeChangeComplete', handleRouteChangeComplete)
+    if (typeof window !== 'undefined' && (window as any).next && (window as any).next.router && (window as any).next.router.events) {
+      const events = (window as any).next.router.events
+      if (typeof events.on === 'function') {
+        events.on('routeChangeStart', handleRouteChangeStart)
+        events.on('routeChangeComplete', handleRouteChangeComplete)
+      }
     }
 
     return () => {
-      if (typeof window !== 'undefined' && (window as any).next) {
-        (window as any).next.router?.events.off('routeChangeStart', handleRouteChangeStart)
-        ;(window as any).next.router?.events.off('routeChangeComplete', handleRouteChangeComplete)
+      if (typeof window !== 'undefined' && (window as any).next && (window as any).next.router && (window as any).next.router.events) {
+        const events = (window as any).next.router.events
+        if (typeof events.off === 'function') {
+          events.off('routeChangeStart', handleRouteChangeStart)
+          events.off('routeChangeComplete', handleRouteChangeComplete)
+        }
       }
     }
   }, [])
