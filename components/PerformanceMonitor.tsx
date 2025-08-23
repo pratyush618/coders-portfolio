@@ -86,7 +86,7 @@ export function PerformanceMonitor() {
       console.log('[Performance] Initializing Web Vitals monitoring...')
       
       // Import Web Vitals dynamically to avoid SSR issues
-      const { getCLS, getFCP, getFID, getLCP, getTTFB, onINP } = await import('web-vitals')
+      const { onCLS, onFCP, onFID, onLCP, onTTFB, onINP } = await import('web-vitals')
       const webVitals: WebVital[] = []
       
       const addVital = (vital: any) => {
@@ -108,11 +108,11 @@ export function PerformanceMonitor() {
       }
       
       // Measure Web Vitals
-      getCLS(addVital)
-      getFCP(addVital)
-      getFID(addVital)
-      getLCP(addVital)
-      getTTFB(addVital)
+      onCLS(addVital)
+      onFCP(addVital)
+      onFID(addVital)
+      onLCP(addVital)
+      onTTFB(addVital)
       
       // INP (Interaction to Next Paint) for newer browsers
       if (typeof onINP === 'function') {
@@ -193,7 +193,7 @@ export function PerformanceMonitor() {
           },
           {
             name: 'Total Load Time',
-            value: navEntry.loadEventEnd - navEntry.navigationStart,
+            value: navEntry.loadEventEnd - navEntry.fetchStart,
             rating: 'good',
             timestamp: Date.now()
           }

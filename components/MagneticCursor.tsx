@@ -44,7 +44,7 @@ export function MagneticCursor() {
   useEffect(() => {
     if (!isDesktop) return
 
-    let animationFrameId: number
+    let animationFrameId: number | null = null
 
     const handleMouseMove = (e: MouseEvent) => {
       setState(prev => ({

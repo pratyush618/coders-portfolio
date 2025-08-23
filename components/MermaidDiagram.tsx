@@ -78,7 +78,6 @@ export function MermaidDiagram({ chart, title }: MermaidDiagramProps) {
             fontSize: 11,
             sectionFontSize: 24,
             gridLineStartPadding: 35,
-            bottomPadding: 25,
             leftPadding: 75,
             topPadding: 35,
             rightPadding: 35
